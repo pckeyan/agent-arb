@@ -9,7 +9,8 @@ HEADING = re.compile(r"^(#{1,6})\s+(.*\S)\s*$")
 
 
 def main(path: str) -> None:
-    lines = open(path, encoding="utf-8").read().splitlines()
+    with open(path, encoding="utf-8") as f:
+        lines = f.read().splitlines()
     sections = []
     start, heading, level = 0, "Preamble", 0
     n = 0

@@ -171,7 +171,7 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
         for f in sorted(docfs, key=lambda f: (f.verdict != "fail", SEVERITY_ORDER[f.severity], f.rule_id)):
             title = rules[f.rule_id].title if f.rule_id in rules else f.rule_id
             lines.append(
-                f"| {f.rule_id} {title} | {f.verdict} | {f.severity} | {f.disposition} | {f.explanation.replace('|', '/')} |"
+                f"| {f.rule_id} {title} | {f.verdict} | {f.severity} | {f.disposition} | {f.explanation.replace('|', '/')} |"  # noqa: E501
             )
         lines.append("")
     docadv = [a for a in record.advisories if a.decision_id is None]
@@ -191,7 +191,7 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
         lines.append("|---|---|---|---|---|---|")
         for c in record.compliance:
             lines.append(
-                f"| {c.framework} | {c.reference} | {c.rule_id} | {c.decision_id or 'document'} | {c.verdict} | {c.disposition} |"
+                f"| {c.framework} | {c.reference} | {c.rule_id} | {c.decision_id or 'document'} | {c.verdict} | {c.disposition} |"  # noqa: E501
             )
         lines.append("")
     lines.append("## Rule packs used")

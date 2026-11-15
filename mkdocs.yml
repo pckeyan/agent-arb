@@ -10,6 +10,7 @@ theme:
       toggle: {icon: material/brightness-4, name: Light}
 nav:
   - Home: index.md
+  - Install: install.md
   - Writing rules: rule-authoring.md
   - Decision records:
       - Two engines, one spec: adr/0001-two-engines-one-spec.md

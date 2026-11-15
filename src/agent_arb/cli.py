@@ -89,7 +89,7 @@ def review(
     document: Path,
     seeds: Annotated[
         list[Path], typer.Option("--seeds", "-s", help="Compiled company pack files or folders. Repeatable.")
-    ] = [],
+    ] = None,
     project: Annotated[Path | None, typer.Option("--project", help="A project-level pack file.")] = None,
     out: Annotated[Path, typer.Option("--out", "-o", help="Output folder for the record and manifest.")] = Path(
         ".agent-arb"
@@ -107,6 +107,8 @@ def review(
     model_override: Annotated[str | None, typer.Option("--model", help="Model name, overriding config.")] = None,
 ) -> None:
     """Review a design document decision by decision and write a record."""
+    if seeds is None:
+        seeds = []
     cfg = load_config()
     tier = tier if tier is not None else cfg.review.default_tier
     challenge = cfg.review.challenge_mode if challenge is None else challenge
@@ -114,11 +116,18 @@ def review(
     if model_override:
         model.name = model_override  # type: ignore[attr-defined]
     packs = _load_all_packs(seeds, project, no_builtin)
-    run_review(document, packs, model, out, tier, interactive, challenge)
+    run_review(document, packs, model, out, tier, interactive, challenge, cfg.review.rules_per_prompt)
 
 
 def run_review(
-    document: Path, packs: list[Pack], model: Model, out: Path, tier: int, interactive: bool, challenge: bool
+    document: Path,
+    packs: list[Pack],
+    model: Model,
+    out: Path,
+    tier: int,
+    interactive: bool,
+    challenge: bool,
+    rules_per_prompt: int = 6,
 ) -> Record:
     """The whole flow. Shared by the CLI and the evals."""
     ruleset = RuleSet(packs)
@@ -137,12 +146,13 @@ def run_review(
     decisions: list[Decision] = []
     for s in sections:
         try:
-            found = propose_decisions(s, model, manifest, start_index=len(decisions) + 1)
+            found, dropped = propose_decisions(s, model, manifest, start_index=len(decisions) + 1)
         except ModelError as e:
             typer.secho(f"  {s.ref} {s.heading}: model error, skipped ({e})", fg="yellow")
             continue
         decisions.extend(found)
-        typer.echo(f"  {s.ref} {s.heading}: {len(found)} decision(s)")
+        note = f", {dropped} dropped for an evidence quote not in the text" if dropped else ""
+        typer.echo(f"  {s.ref} {s.heading}: {len(found)} decision(s){note}")
     if interactive:
         decisions = _confirm_decisions(decisions)
     else:
@@ -159,7 +169,7 @@ def run_review(
         if interactive and challenge:
             _ask_advisories(d, advs)
         try:
-            kept, dropped = judge_decision(d, section, selected, model, manifest)
+            kept, dropped = judge_decision(d, section, selected, model, manifest, rules_per_prompt)
         except ModelError as e:
             typer.secho(f"  {d.id}: model error, no findings ({e})", fg="yellow")
             kept, dropped = [], []
@@ -289,7 +299,7 @@ def rules_approve(pack_path: Path, reviewer: Annotated[str, typer.Option("--revi
         if r.status != Status.DRAFT:
             continue
         typer.echo(
-            f"\n{r.id} [{r.severity}] {r.title}\n  {r.requirement}\n  tags: {', '.join(r.tags)}  source: {r.source.name} {r.source.locator}"
+            f"\n{r.id} [{r.severity}] {r.title}\n  {r.requirement}\n  tags: {', '.join(r.tags)}  source: {r.source.name} {r.source.locator}"  # noqa: E501
         )
         choice = typer.prompt("  [a]pprove, [e]dit, [r]eject, [s]kip", default="a").strip().lower()[:1]
         if choice == "s":
@@ -310,16 +320,18 @@ def rules_approve(pack_path: Path, reviewer: Annotated[str, typer.Option("--revi
     dump_pack(pack, pack_path)
     approved = sum(1 for r in pack.rules if r.status == Status.APPROVED)
     typer.echo(
-        f"{approved} approved, {sum(1 for r in pack.rules if r.status == Status.DRAFT)} still draft, written to {pack_path}"
+        f"{approved} approved, {sum(1 for r in pack.rules if r.status == Status.DRAFT)} still draft, written to {pack_path}"  # noqa: E501
     )
 
 
 @rules_app.command("list")
 def rules_list(
-    seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = [],
+    seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = None,
     no_builtin: Annotated[bool, typer.Option("--no-builtin")] = False,
 ) -> None:
     """List approved rules after precedence, and report overridden base rules."""
+    if seeds is None:
+        seeds = []
     rs = RuleSet(_load_all_packs(seeds, None, no_builtin))
     for r in rs.rules.values():
         typer.echo(f"{r.id:<16} {r.severity:<8} {r.scope:<14} {r.target:<9} {r.type:<8} {r.title}")
@@ -329,8 +341,10 @@ def rules_list(
 
 
 @rules_app.command("coverage")
-def rules_coverage(seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = []) -> None:
+def rules_coverage(seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = None) -> None:
     """Rules per tag and scope. Thin cells are the gap list."""
+    if seeds is None:
+        seeds = []
     rs = RuleSet(_load_all_packs(seeds, None, False))
     grid = rs.coverage()
     scopes = ["architecture", "design", "implementation", "practice"]
@@ -341,9 +355,11 @@ def rules_coverage(seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] =
 
 @rules_app.command("select")
 def rules_select(
-    decision_json: Path, tier: int = 2, seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = []
+    decision_json: Path, tier: int = 2, seeds: Annotated[list[Path], typer.Option("--seeds", "-s")] = None
 ) -> None:
     """Show which rules a decision (as JSON) would pull in. For debugging packs."""
+    if seeds is None:
+        seeds = []
     d = Decision.model_validate(json.loads(decision_json.read_text(encoding="utf-8")))
     rs = RuleSet(_load_all_packs(seeds, None, False))
     for r in rs.select(d, tier):

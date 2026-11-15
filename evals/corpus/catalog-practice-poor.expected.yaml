@@ -1,0 +1,6 @@
+tier: 3
+decisions_expected:
+  - [elasticsearch]
+  - [redis]
+must_fail: [PRC-DEC-002, PRC-DEC-003, PRC-DOC-001, PRC-DOC-002]
+must_pass: []

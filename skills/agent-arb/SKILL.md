@@ -27,7 +27,7 @@ Run `python3 scripts/split_sections.py <document>` to list sections with line ra
 
 ## 3. Propose decisions
 
-For each section, read it and propose decisions using the instructions in `references/decisions-prompt.md`. A decision is a choice that could have gone another way. Write the proposed list to `.agent-arb/<doc>.decisions.json` in the shape of `references/decision.schema.json`, with `evidence_quote` copied verbatim.
+For each section, read it and propose decisions using the instructions in `references/decisions-prompt.md`. A decision is a choice that could have gone another way. Write the proposed list to `.agent-arb/<doc>.decisions.json` in the shape of `references/decision.schema.json`, with `evidence_quote` copied verbatim. Drop any proposal whose `evidence_quote` is not actually in the section; a decision the text does not support is not a decision.
 
 Show the author the list, one line per decision, and ask them to keep, edit or drop each. Renumber and mark `confirmed: true`.
 
@@ -37,7 +37,7 @@ For each confirmed decision:
 
 1. Run `python3 scripts/select_rules.py --decision <decision json> --tier <tier> [--company <folder>]`. It prints the matching rules as JSON, with precedence applied. Do not select rules yourself.
 2. If challenge mode is on, ask the advisory questions from that output first, one at a time, and record the answers.
-3. Judge the decision against the check rules using `references/review-prompt.md`. Produce one finding per rule with a verbatim quote.
+3. Judge the decision against the check rules using `references/review-prompt.md`, no more than six rules at a time so every rule gets a finding. Produce one finding per rule with a verbatim quote.
 4. Write the findings to `.agent-arb/<doc>.findings.<decision id>.json` and run `python3 scripts/verify_quotes.py --findings <that file> --section-text <section file>`. Use only what it keeps.
 5. Walk the author through each failed or unclear finding: accept, dispute, revise or waive, with a rationale for anything but accept.
 6. If challenge mode is off, ask the advisory questions now.

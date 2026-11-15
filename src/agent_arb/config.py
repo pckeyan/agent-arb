@@ -23,6 +23,8 @@ timeout_seconds = 180
 default_tier = 2
 # Ask the author to justify each decision before showing findings.
 challenge_mode = false
+# How many rules go into one judging prompt. Smaller is better for small models.
+rules_per_prompt = 6
 """
 
 
@@ -38,6 +40,7 @@ class ModelConfig:
 class ReviewConfig:
     default_tier: int = 2
     challenge_mode: bool = False
+    rules_per_prompt: int = 6
 
 
 @dataclass
@@ -62,6 +65,7 @@ def load_config(path: Path = CONFIG_PATH) -> Config:
         review=ReviewConfig(
             default_tier=int(r.get("default_tier", 2)),
             challenge_mode=bool(r.get("challenge_mode", False)),
+            rules_per_prompt=int(r.get("rules_per_prompt", 6)),
         ),
     )
 

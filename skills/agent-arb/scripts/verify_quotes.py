@@ -23,7 +23,8 @@ def main():
     with open(a.findings, encoding="utf-8") as f:
         data = json.load(f)
     findings = data["findings"] if isinstance(data, dict) else data
-    text = norm(open(a.section_text, encoding="utf-8").read())
+    with open(a.section_text, encoding="utf-8") as f:
+        text = norm(f.read())
     kept, dropped = [], []
     for fnd in findings:
         q = norm(fnd.get("quote", ""))

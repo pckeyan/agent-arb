@@ -1,0 +1,5 @@
+# Minimum scores per metric for the eval gate. Scores are averaged over the corpus.
+decision_recall: 0.8
+finding_recall: 0.7
+false_positive_rate_max: 0.2
+boundary_compliance: 1.0

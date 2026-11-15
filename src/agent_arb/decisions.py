@@ -7,6 +7,7 @@ from importlib import resources
 from .llm import Model
 from .manifest import Manifest
 from .models import DATA_CLASSES, Decision, ManifestEntry, Option, Scope, Section
+from .verify import quote_in
 
 TAG_VOCABULARY = [
     "reliability",
@@ -71,7 +72,10 @@ def _prompt() -> str:
     return text.replace("{tags}", ", ".join(TAG_VOCABULARY)).replace("{data_classes}", ", ".join(DATA_CLASSES))
 
 
-def propose_decisions(section: Section, model: Model, manifest: Manifest, start_index: int) -> list[Decision]:
+def propose_decisions(
+    section: Section, model: Model, manifest: Manifest, start_index: int
+) -> tuple[list[Decision], int]:
+    """Returns the decisions kept and how many were dropped for an evidence quote not found in the section."""
     system = _prompt()
     user = f"SECTION {section.ref}: {section.heading}\n\n{section.text}"
     manifest.add(
@@ -79,9 +83,14 @@ def propose_decisions(section: Section, model: Model, manifest: Manifest, start_
     )
     reply = model.complete_json(system, user)
     out: list[Decision] = []
-    for i, raw in enumerate(reply.get("decisions", []) or []):
+    dropped = 0
+    for raw in reply.get("decisions", []) or []:
         if not isinstance(raw, dict) or not raw.get("title"):
             continue
+        if not quote_in(str(raw.get("evidence_quote", "")), section.text):
+            dropped += 1
+            continue
+        i = len(out)
         scope_raw = str(raw.get("scope", "architecture")).lower()
         scope = (
             Scope(scope_raw)
@@ -110,4 +119,4 @@ def propose_decisions(section: Section, model: Model, manifest: Manifest, start_
                 data_classes=data_classes,
             )
         )
-    return out
+    return out, dropped

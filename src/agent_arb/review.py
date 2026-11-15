@@ -39,11 +39,28 @@ def rules_text(rules: list[Rule]) -> str:
 
 
 def judge_decision(
-    decision: Decision, section: Section, rules: list[Rule], model: Model, manifest: Manifest
+    decision: Decision,
+    section: Section,
+    rules: list[Rule],
+    model: Model,
+    manifest: Manifest,
+    rules_per_prompt: int = 6,
 ) -> tuple[list[Finding], list[Finding]]:
+    """Judge in batches of a few rules so small models answer every rule. One section per prompt, always."""
     checks = [r for r in rules if r.type == RuleType.CHECK]
     if not checks:
         return [], []
+    findings: list[Finding] = []
+    for start in range(0, len(checks), max(1, rules_per_prompt)):
+        findings.extend(
+            _judge_batch(decision, section, checks[start : start + max(1, rules_per_prompt)], model, manifest)
+        )
+    return verify_findings(findings, packet_text(decision, section))
+
+
+def _judge_batch(
+    decision: Decision, section: Section, checks: list[Rule], model: Model, manifest: Manifest
+) -> list[Finding]:
     system = _prompt("review.md")
     user = f"{packet_text(decision, section)}\n\nRULES:\n{rules_text(checks)}"
     manifest.add(
@@ -89,7 +106,7 @@ def judge_decision(
                     explanation="The model returned no finding for this rule.",
                 )
             )
-    return verify_findings(findings, packet_text(decision, section))
+    return findings
 
 
 def judge_document(

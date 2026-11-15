@@ -1,0 +1,55 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 843 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+50 780 Td
+(Acme platform standards) Tj T*
+() Tj T*
+(These are fictional company standards used to demonstrate compiling a seed document.) Tj T*
+() Tj T*
+(Reliability) Tj T*
+() Tj T*
+(- Every tier 1 service must run in at least three availability zones.) Tj T*
+(- Services must publish a readiness endpoint that checks dependencies.) Tj T*
+() Tj T*
+(Security) Tj T*
+() Tj T*
+(- All internal traffic must use mutual TLS issued by the Acme platform CA.) Tj T*
+(- Secrets must be read from Acme Vault; environment variables holding secrets are not allowed.) Tj T*
+(- Tokens between services must never live longer than 15 minutes.) Tj T*
+() Tj T*
+(Observability) Tj T*
+() Tj T*
+(- Latency objectives must be stated as p99 over 30 days.) Tj T*
+(- Every paging alert must link to a runbook in the Acme runbook catalogue.) Tj T*
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001135 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1205
+%%EOF
