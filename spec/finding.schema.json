@@ -1,0 +1,84 @@
+{
+  "$defs": {
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "rule_id": {
+      "title": "Rule Id",
+      "type": "string"
+    },
+    "decision_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Decision Id"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "unclear"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "severity": {
+      "$ref": "#/$defs/Severity"
+    },
+    "quote": {
+      "default": "",
+      "title": "Quote",
+      "type": "string"
+    },
+    "explanation": {
+      "default": "",
+      "title": "Explanation",
+      "type": "string"
+    },
+    "verified": {
+      "default": false,
+      "title": "Verified",
+      "type": "boolean"
+    },
+    "disposition": {
+      "default": "open",
+      "enum": [
+        "open",
+        "accepted",
+        "disputed",
+        "revised",
+        "waived"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "rationale": {
+      "default": "",
+      "title": "Rationale",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rule_id",
+    "decision_id",
+    "verdict",
+    "severity"
+  ],
+  "title": "Finding",
+  "type": "object"
+}

@@ -1,0 +1,288 @@
+{
+ "name": "authors-distributed-foundations",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Principles from the foundational distributed systems literature, restated in Agent ARB's own words with a citation. No text reused; the authors have not reviewed or endorsed this pack.",
+ "rules": [
+  {
+   "id": "AUT-DIST-001",
+   "title": "The network is not reliable, fast, secure or homogeneous",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "failure",
+    "network",
+    "resilience",
+    "integration"
+   ],
+   "requirement": "The design does not assume the network is always available, has zero latency, infinite bandwidth, is secure, has a fixed topology, or has one administrator. Each remote call path says what happens when the network is partitioned or slow.",
+   "question": "",
+   "evidence_hints": [
+    "partition",
+    "network failure",
+    "latency",
+    "bandwidth"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "L. Peter Deutsch and colleagues at Sun Microsystems",
+    "locator": "The Fallacies of Distributed Computing",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-DIST-002",
+   "title": "Choose consistency or availability under partition, explicitly",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "consistency",
+    "availability",
+    "replication",
+    "data"
+   ],
+   "requirement": "For each replicated store the design states what it gives up during a partition, consistency or availability, and why that is acceptable for the data in question.",
+   "question": "",
+   "evidence_hints": [
+    "CAP",
+    "partition",
+    "consistent",
+    "available",
+    "eventual"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "replication",
+     "consistency",
+     "data",
+     "multi-region",
+     "storage"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Eric Brewer",
+    "locator": "CAP Twelve Years Later: How the Rules Have Changed, IEEE Computer, 2012",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-DIST-003",
+   "title": "Cross-service writes avoid distributed transactions",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "consistency",
+    "data",
+    "integration",
+    "messaging"
+   ],
+   "requirement": "Where a business operation updates more than one service, the design uses local transactions plus asynchronous messaging, idempotent handlers and compensating actions rather than a two-phase commit across services, or justifies the exception.",
+   "question": "",
+   "evidence_hints": [
+    "saga",
+    "compensate",
+    "outbox",
+    "two-phase",
+    "distributed transaction",
+    "idempotent"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "data",
+     "integration",
+     "messaging",
+     "consistency"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Pat Helland",
+    "locator": "Life beyond Distributed Transactions: an Apostate's Opinion, CIDR 2007",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-DIST-004",
+   "title": "Eventual consistency is named where it exists, with its user-visible effect",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "consistency",
+    "data",
+    "replication"
+   ],
+   "requirement": "Any path where a reader can observe stale data is identified, the expected staleness window is stated, and the design says what the user sees and whether read-your-writes is needed.",
+   "question": "",
+   "evidence_hints": [
+    "eventual",
+    "stale",
+    "read-your-writes",
+    "staleness"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "consistency",
+     "replication",
+     "data",
+     "caching"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Werner Vogels",
+    "locator": "Eventually Consistent, Communications of the ACM, 2009",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-DIST-005",
+   "title": "Latency budgets are built from known operation costs",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "latency",
+    "performance"
+   ],
+   "requirement": "The latency objective is decomposed across hops and storage operations using realistic per-operation costs, so the design shows the objective is achievable before it is built.",
+   "question": "",
+   "evidence_hints": [
+    "latency budget",
+    "round trip",
+    "disk",
+    "cache",
+    "hop"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "latency",
+     "performance"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Jeff Dean",
+    "locator": "Numbers Everyone Should Know, Stanford CS295 lecture, 2010",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-DIST-006",
+   "title": "Logs and streams are the integration backbone, with ordering stated",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "messaging",
+    "ordering",
+    "data",
+    "integration"
+   ],
+   "requirement": "Where events are used to move data between services, the design states the ordering guarantee, the partitioning key that provides it, the delivery guarantee, and how consumers handle duplicates.",
+   "question": "",
+   "evidence_hints": [
+    "ordering",
+    "partition key",
+    "at-least-once",
+    "exactly-once",
+    "duplicate",
+    "offset"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "ordering",
+     "integration",
+     "data"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Martin Kleppmann",
+    "locator": "Designing Data-Intensive Applications, Chapter 11, Stream Processing",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "8c44bf43122b6a21"
+}

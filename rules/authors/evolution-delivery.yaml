@@ -1,0 +1,47 @@
+name: authors-evolution-delivery
+layer: base
+version: 0.1.0
+description: Evolutionary architecture and continuous delivery principles. No text reused.
+rules:
+  - id: AUT-EVO-001
+    title: Fitness functions protect the characteristics the design claims
+    severity: medium
+    scope: practice
+    target: document
+    tags: [quality-attributes, testing]
+    requirement: For each characteristic the design claims to protect, such as latency or coupling, there is an automated check named that would fail if a change violated it.
+    evidence_hints: [fitness function, automated check, architecture test, threshold]
+    source: {kind: author-principle, name: Neal Ford, Rebecca Parsons and Patrick Kua, locator: "Building Evolutionary Architectures, Chapter 2, Fitness Functions", text_reused: none}
+  - id: AUT-EVO-002
+    title: Every change reaches production through one automated pipeline
+    severity: medium
+    tags: [delivery, deployment, testing]
+    requirement: The design names the pipeline that builds, tests and deploys the service, states that no manual step alters the artifact, and shows that the same artifact is promoted through environments.
+    evidence_hints: [pipeline, promote, artifact, automated, environment]
+    applies_when: {tags_any: [delivery, deployment]}
+    source: {kind: author-principle, name: Jez Humble and David Farley, locator: "Continuous Delivery, Chapter 5, Anatomy of the Deployment Pipeline", text_reused: none}
+  - id: AUT-EVO-003
+    title: Decisions are recorded with context, options and consequences
+    severity: medium
+    scope: practice
+    tags: [decision-record]
+    requirement: Each significant decision has a record stating the context, the options considered, the choice, the consequences, and its status, so that it can be revisited later with the reasoning intact.
+    evidence_hints: [ADR, decision record, context, consequences, status]
+    source: {kind: author-principle, name: Michael Nygard, locator: "Documenting Architecture Decisions, 2011", url: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions, text_reused: none}
+  - id: AUT-EVO-004
+    title: Feature flags have an owner and a removal date
+    severity: low
+    scope: design
+    tags: [delivery, deployment]
+    requirement: Each flag used for rollout or kill switches names an owner and when it will be removed, so flags do not accumulate as permanent branches.
+    evidence_hints: [feature flag, toggle, kill switch, remove]
+    applies_when: {tags_any: [delivery, deployment]}
+    source: {kind: author-principle, name: Pete Hodgson, locator: "Feature Toggles, martinfowler.com", url: https://martinfowler.com/articles/feature-toggles.html, text_reused: none}
+  - id: AUT-EVO-005
+    title: Decisions are deferred to the last responsible moment where cheap
+    severity: low
+    scope: practice
+    type: advisory
+    tags: [reversibility, decision-record]
+    question: Which of the decisions in this document could be deferred until more is known, what would it cost to keep that option open, and why are you deciding now?
+    source: {kind: author-principle, name: Mary and Tom Poppendieck, locator: "Lean Software Development, Chapter 3, Decide as Late as Possible", text_reused: none}

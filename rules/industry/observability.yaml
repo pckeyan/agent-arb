@@ -1,0 +1,122 @@
+name: industry-observability
+layer: base
+version: 0.1.0
+description: Monitoring, service levels and alerting, with maturity levels 1 to 4.
+rules:
+  - id: IND-OBS-001
+    title: Centralised logs and a basic dashboard exist
+    severity: medium
+    level: 1
+    tags: [observability, logging]
+    requirement: Logs from every component are collected centrally with a request identifier, and there is at least one dashboard showing the service's health.
+    evidence_hints: [log, centralised, dashboard, request id]
+    source: {kind: cc-by, name: OpenTelemetry documentation, locator: "Concepts: Signals, Logs", url: https://opentelemetry.io/docs/concepts/signals/logs/, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-002
+    title: Golden signals per service
+    severity: high
+    level: 2
+    tags: [observability, metrics, slo]
+    requirement: For each service the design names an indicator for latency, traffic, errors and saturation.
+    evidence_hints: [latency, traffic, error rate, saturation, golden signals, RED]
+    source: {kind: reference, name: "Site Reliability Engineering (Google), Chapter 6, Monitoring Distributed Systems", url: https://sre.google/sre-book/monitoring-distributed-systems/, licence: "CC BY-NC-ND 4.0, cited only", text_reused: none}
+  - id: IND-OBS-003
+    title: Latency objectives as percentiles with a window
+    severity: high
+    level: 2
+    tags: [observability, latency, slo]
+    requirement: Every latency objective is stated as a percentile, a threshold and a measurement window, for example p99 under 300 ms over 28 days. An average or a bare number fails.
+    evidence_hints: [p99, p95, p50, percentile, ms, over, window, days]
+    expects: [percentile, threshold, window]
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Reliability, define SLOs, url: https://docs.cloud.google.com/architecture/framework/reliability, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-004
+    title: Say where latency is measured
+    severity: medium
+    level: 2
+    tags: [observability, latency, slo]
+    requirement: The design states whether the latency objective is measured at the client, the edge or the service, and which measurement the objective refers to.
+    evidence_hints: [measured at, client-side, server-side, edge, load balancer]
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Reliability, choose SLIs, url: https://docs.cloud.google.com/architecture/framework/reliability, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-005
+    title: Percentiles come from histograms, not averaged across instances
+    severity: medium
+    level: 2
+    scope: design
+    tags: [observability, metrics, latency]
+    requirement: Latency metrics are recorded as histograms so percentiles can be computed across instances. Averaging per-instance percentiles is a known wrong design and fails this rule.
+    evidence_hints: [histogram, bucket, percentile, aggregate]
+    source: {kind: cc-by, name: OpenTelemetry documentation, locator: "Concepts: Signals, Metrics, Histogram", url: https://opentelemetry.io/docs/concepts/signals/metrics/, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-006
+    title: Control tail latency in fan-out designs
+    severity: medium
+    level: 3
+    tags: [observability, latency, performance]
+    requirement: Where a request fans out to several backends, the design says how p99 is controlled, for example hedged requests, deadlines propagated to backends, or partial results.
+    evidence_hints: [fan-out, hedged, deadline, partial results, tail]
+    applies_when: {tags_any: [latency, performance, messaging, integration]}
+    source: {kind: author-principle, name: Jeffrey Dean and Luiz André Barroso, locator: "The Tail at Scale, Communications of the ACM, 2013", text_reused: none}
+  - id: IND-OBS-007
+    title: Error budget and burn-rate alerting
+    severity: high
+    level: 3
+    tags: [alerting, slo, observability]
+    requirement: An error budget is derived from the objective, and alerts fire on the rate at which the budget is being consumed over at least two windows, a fast one and a slow one, rather than on static thresholds.
+    evidence_hints: [error budget, burn rate, multi-window, alert]
+    source: {kind: reference, name: "The Site Reliability Workbook (Google), Chapter 5, Alerting on SLOs", url: https://sre.google/workbook/alerting-on-slos/, licence: "CC BY-NC-ND 4.0, cited only", text_reused: none}
+  - id: IND-OBS-008
+    title: Alerts name user impact and carry a severity
+    severity: high
+    level: 2
+    tags: [alerting, observability]
+    requirement: Each alert states what a user experiences when it fires and has a severity on a defined ladder, with paging reserved for the top of it. Alerts on causes alone, for example CPU over a threshold, do not satisfy this.
+    evidence_hints: [alert, severity, page, symptom, user impact]
+    source: {kind: cc-by, name: Azure Well-Architected Framework, locator: Operational excellence, alerting, url: https://learn.microsoft.com/azure/well-architected/operational-excellence/observability, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-009
+    title: Every paging alert has a runbook and an on-call owner
+    severity: high
+    level: 3
+    tags: [alerting, observability]
+    requirement: Each alert that can page links to a runbook with an owner, and the design names the on-call rotation and escalation path.
+    evidence_hints: [runbook, on-call, escalation, rotation]
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Operational excellence, manage incidents, url: https://docs.cloud.google.com/architecture/framework/operational-excellence, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-010
+    title: Traces, metrics and logs are correlated
+    severity: medium
+    level: 3
+    tags: [observability, tracing]
+    requirement: A trace exists for the critical request path, trace and request identifiers are propagated across every hop, and logs and metrics can be joined to a trace.
+    evidence_hints: [trace, span, correlation, propagate, context]
+    source: {kind: cc-by, name: OpenTelemetry documentation, locator: "Concepts: Context propagation", url: https://opentelemetry.io/docs/concepts/context-propagation/, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-011
+    title: Monitor every layer, including what the user sees
+    severity: medium
+    level: 2
+    tags: [observability, metrics]
+    requirement: Monitoring covers infrastructure, platform dependencies, the application, business outcomes and an external view such as synthetic probes or client telemetry, with at least one signal named per layer.
+    evidence_hints: [synthetic, probe, business metric, dependency, infrastructure]
+    source: {kind: cc-by, name: Azure Well-Architected Framework, locator: Operational excellence, instrument an application, url: https://learn.microsoft.com/azure/well-architected/operational-excellence/instrument-application, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-012
+    title: Review alert noise and synthetic coverage as a routine
+    severity: low
+    level: 4
+    tags: [alerting, observability]
+    requirement: The design names a routine for reviewing alerts that fire too often or never, and for keeping synthetic checks aligned with the critical user journeys.
+    evidence_hints: [alert review, noise, synthetic, routine]
+    applies_when: {min_tier: 1}
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Operational excellence, continuous improvement, url: https://docs.cloud.google.com/architecture/framework/operational-excellence, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-013
+    title: Dashboards per audience
+    severity: low
+    level: 2
+    tags: [observability]
+    requirement: There are separate views for the operator, the on-call engineer and the business owner, each showing the signals that audience acts on.
+    evidence_hints: [dashboard, operator, on-call, business]
+    source: {kind: cc-by, name: Azure Well-Architected Framework, locator: Operational excellence, visualization, url: https://learn.microsoft.com/azure/well-architected/operational-excellence/observability, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-OBS-014
+    title: Alert noise is budgeted and auto-remediation exists for known failures
+    severity: low
+    level: 4
+    tags: [alerting, observability]
+    requirement: The design states a budget for alert volume per on-call shift and names failures that are remediated automatically before paging anyone.
+    evidence_hints: [auto-remediation, self-healing, alert budget]
+    applies_when: {min_tier: 1}
+    source: {kind: reference, name: "Site Reliability Engineering (Google), Chapter 7, The Evolution of Automation at Google", url: https://sre.google/sre-book/automation-at-google/, licence: "CC BY-NC-ND 4.0, cited only", text_reused: none}

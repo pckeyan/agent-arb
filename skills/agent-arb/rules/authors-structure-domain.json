@@ -1,0 +1,268 @@
+{
+ "name": "authors-structure-domain",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Boundaries, domains and system structure. No text reused.",
+ "rules": [
+  {
+   "id": "AUT-STR-001",
+   "title": "Service boundaries follow bounded contexts",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "domain",
+    "boundaries",
+    "coupling"
+   ],
+   "requirement": "Each service owns a coherent part of the domain with its own model and language, and the design names the contexts and how terms are translated at their borders.",
+   "question": "",
+   "evidence_hints": [
+    "bounded context",
+    "domain",
+    "ubiquitous language",
+    "anti-corruption"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "domain",
+     "boundaries",
+     "coupling",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Eric Evans",
+    "locator": "Domain-Driven Design, Chapter 14, Maintaining Model Integrity",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STR-002",
+   "title": "Each piece of data has exactly one owning service",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "data",
+    "boundaries",
+    "coupling"
+   ],
+   "requirement": "No two services write the same table or record. The design names the owner of each data set and how other services obtain copies or ask for changes.",
+   "question": "",
+   "evidence_hints": [
+    "owner",
+    "shared database",
+    "single writer",
+    "copy"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "data",
+     "boundaries",
+     "storage",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Sam Newman",
+    "locator": "Building Microservices, 2nd ed., Chapter 4, Microservice Communication Styles, and Chapter 6, Workflow",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STR-003",
+   "title": "Distribution is justified, not assumed",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "boundaries",
+    "coupling"
+   ],
+   "requirement": "For each network boundary introduced, the design states the benefit that outweighs the added latency, failure modes and operational cost, since the first rule of distributed objects is not to distribute them.",
+   "question": "",
+   "evidence_hints": [
+    "why separate",
+    "boundary",
+    "monolith",
+    "latency",
+    "operational"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Martin Fowler",
+    "locator": "Patterns of Enterprise Application Architecture, Chapter 7, Distribution Strategies",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STR-004",
+   "title": "Migrations use incremental replacement with a kill switch",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "delivery",
+    "deployment",
+    "coupling"
+   ],
+   "requirement": "Where an existing system is replaced, traffic is moved in slices behind a facade or router, each slice can be reverted independently, and the old path is retired only after the new one has proven itself.",
+   "question": "",
+   "evidence_hints": [
+    "strangler",
+    "facade",
+    "incremental",
+    "cut over",
+    "revert"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "delivery",
+     "deployment",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Martin Fowler",
+    "locator": "StranglerFigApplication, martinfowler.com",
+    "url": "https://martinfowler.com/bliki/StranglerFigApplication.html",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STR-005",
+   "title": "Architecture characteristics are ranked and traded explicitly",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "quality-attributes",
+    "tradeoff"
+   ],
+   "requirement": "The document ranks the characteristics that matter most for this system, such as availability, elasticity, security and evolvability, and the decisions reference that ranking when they trade one against another.",
+   "question": "",
+   "evidence_hints": [
+    "characteristics",
+    "priority",
+    "trade-off",
+    "-ilities"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Mark Richards and Neal Ford",
+    "locator": "Fundamentals of Software Architecture, Chapters 4 to 6, Architecture Characteristics",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STR-006",
+   "title": "Diagrams use consistent abstraction levels with a legend",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "diagrams"
+   ],
+   "requirement": "Each diagram sits at one level, such as system context, containers or components, mixes no levels, and has a legend or consistent notation for boxes and lines.",
+   "question": "",
+   "evidence_hints": [
+    "diagram",
+    "context",
+    "container",
+    "component",
+    "legend"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "The C4 model",
+    "locator": "Abstractions and diagrams",
+    "url": "https://c4model.com/",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "72cfd405f9900451"
+}

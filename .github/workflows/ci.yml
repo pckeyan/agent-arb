@@ -1,0 +1,22 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: {python: ["3.12", "3.13"]}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with: {enable-cache: true}
+      - run: uv python install ${{ matrix.python }}
+      - run: uv sync --python ${{ matrix.python }}
+      - run: uv run ruff check .
+      - run: uv run python scripts/check_forbidden_words.py
+      - run: uv run agent-arb rules validate rules
+      - run: uv run python scripts/sync_packs.py && git diff --exit-code skills/agent-arb/rules
+      - run: uv run python scripts/export_spec.py && git diff --exit-code spec
+      - run: uv run pytest -q
+      - run: uv build

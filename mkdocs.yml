@@ -1,0 +1,24 @@
+site_name: Agent ARB
+site_description: An architecture review board you can run on your laptop.
+repo_url: https://github.com/pckeyan/agent-arb
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle: {icon: material/brightness-7, name: Dark}
+    - scheme: slate
+      toggle: {icon: material/brightness-4, name: Light}
+nav:
+  - Home: index.md
+  - Writing rules: rule-authoring.md
+  - Decision records:
+      - Two engines, one spec: adr/0001-two-engines-one-spec.md
+      - Rule engine, not prompt: adr/0002-rule-engine-not-prompt.md
+      - Sources by licence first: adr/0003-licensing-of-sources.md
+markdown_extensions:
+  - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

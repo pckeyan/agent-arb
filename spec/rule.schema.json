@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "AppliesWhen": {
+      "description": "Conditions that must hold for a rule to be selected. Empty means always.",
+      "properties": {
+        "data_classes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Data Classes",
+          "type": "array"
+        },
+        "tags_any": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags Any",
+          "type": "array"
+        },
+        "min_tier": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Tier"
+        }
+      },
+      "title": "AppliesWhen",
+      "type": "object"
+    },
+    "Override": {
+      "description": "How a company or project rule changes a base rule.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "supersedes",
+            "tightens",
+            "waives"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "rule": {
+          "title": "Rule",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "rule"
+      ],
+      "title": "Override",
+      "type": "object"
+    },
+    "RuleType": {
+      "enum": [
+        "check",
+        "advisory"
+      ],
+      "title": "RuleType",
+      "type": "string"
+    },
+    "Scope": {
+      "enum": [
+        "architecture",
+        "design",
+        "implementation",
+        "practice"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "Source": {
+      "description": "Where a rule came from. Every rule has one; the attribution file is built from these.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "public-domain",
+            "cc-by",
+            "mit",
+            "author-principle",
+            "reference",
+            "company"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "locator": {
+          "default": "",
+          "title": "Locator",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        },
+        "licence": {
+          "default": "",
+          "title": "Licence",
+          "type": "string"
+        },
+        "text_reused": {
+          "default": "none",
+          "enum": [
+            "none",
+            "adapted"
+          ],
+          "title": "Text Reused",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name"
+      ],
+      "title": "Source",
+      "type": "object"
+    },
+    "Status": {
+      "enum": [
+        "draft",
+        "approved",
+        "rejected"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "Target": {
+      "enum": [
+        "decision",
+        "document"
+      ],
+      "title": "Target",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/Scope",
+      "default": "architecture"
+    },
+    "target": {
+      "$ref": "#/$defs/Target",
+      "default": "decision"
+    },
+    "type": {
+      "$ref": "#/$defs/RuleType",
+      "default": "check"
+    },
+    "severity": {
+      "$ref": "#/$defs/Severity",
+      "default": "medium"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "requirement": {
+      "default": "",
+      "title": "Requirement",
+      "type": "string"
+    },
+    "question": {
+      "default": "",
+      "title": "Question",
+      "type": "string"
+    },
+    "evidence_hints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Hints",
+      "type": "array"
+    },
+    "expects": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Expects",
+      "type": "array"
+    },
+    "applies_when": {
+      "$ref": "#/$defs/AppliesWhen"
+    },
+    "level": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Level"
+    },
+    "compliance_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Compliance Refs",
+      "type": "array"
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    },
+    "status": {
+      "$ref": "#/$defs/Status",
+      "default": "approved"
+    },
+    "overrides": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Override"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reviewed_by": {
+      "default": "",
+      "title": "Reviewed By",
+      "type": "string"
+    },
+    "reviewed_on": {
+      "default": "",
+      "title": "Reviewed On",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "source"
+  ],
+  "title": "Rule",
+  "type": "object"
+}

@@ -1,0 +1,89 @@
+{
+ "name": "industry-cost",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Cost awareness in design.",
+ "rules": [
+  {
+   "id": "IND-COST-001",
+   "title": "Attribute cost to an owner and a unit",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "cost"
+   ],
+   "requirement": "The design says how the system's cost is tagged or allocated, who owns it, and what the unit cost is measured against, for example cost per request or per tenant.",
+   "question": "",
+   "evidence_hints": [
+    "cost",
+    "budget",
+    "tag",
+    "allocation",
+    "unit economics"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "FinOps Framework",
+    "locator": "Capabilities: Allocation, Unit Economics",
+    "url": "https://www.finops.org/framework/",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-COST-002",
+   "title": "Name the largest cost driver and how it scales",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "cost",
+    "scalability"
+   ],
+   "requirement": "The design identifies the component or data flow that dominates cost and states whether that cost grows linearly, step-wise or not at all with load.",
+   "question": "",
+   "evidence_hints": [
+    "cost driver",
+    "egress",
+    "storage cost",
+    "compute cost"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Cost optimization",
+    "url": "https://docs.cloud.google.com/architecture/framework/cost-optimization",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "82f0b1781f1c866d"
+}

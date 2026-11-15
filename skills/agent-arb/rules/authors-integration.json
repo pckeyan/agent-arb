@@ -1,0 +1,287 @@
+{
+ "name": "authors-integration",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Messaging and integration principles. Pattern names are used as names; no text reused.",
+ "rules": [
+  {
+   "id": "AUT-INT-001",
+   "title": "Message consumers are idempotent",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "messaging",
+    "idempotency",
+    "integration"
+   ],
+   "requirement": "Every consumer tolerates receiving the same message more than once without a wrong side effect, and the design names how duplicates are detected, for example a message id store or a natural idempotency key.",
+   "question": "",
+   "evidence_hints": [
+    "idempotent",
+    "duplicate",
+    "message id",
+    "dedupe"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "integration",
+     "idempotency"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe and Bobby Woolf",
+    "locator": "Enterprise Integration Patterns, Idempotent Receiver",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-INT-002",
+   "title": "Poison messages have a dead letter path with an owner",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "messaging",
+    "failure",
+    "integration"
+   ],
+   "requirement": "A message that cannot be processed after bounded retries is moved to a dead letter channel, the design names who watches that channel and how messages are replayed or discarded.",
+   "question": "",
+   "evidence_hints": [
+    "dead letter",
+    "DLQ",
+    "poison",
+    "replay"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe and Bobby Woolf",
+    "locator": "Enterprise Integration Patterns, Dead Letter Channel and Invalid Message Channel",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-INT-003",
+   "title": "The integration style is chosen deliberately per interaction",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "integration",
+    "coupling",
+    "messaging",
+    "api"
+   ],
+   "requirement": "For each interaction the design says whether it is a synchronous call, an asynchronous message or a shared data store, and why that style fits the coupling and timing needs of that interaction.",
+   "question": "",
+   "evidence_hints": [
+    "synchronous",
+    "asynchronous",
+    "request-reply",
+    "event",
+    "shared database"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "integration",
+     "messaging",
+     "api",
+     "coupling"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe and Bobby Woolf",
+    "locator": "Enterprise Integration Patterns, Chapter 2, Integration Styles",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-INT-004",
+   "title": "Message contracts are versioned and evolve compatibly",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "messaging",
+    "versioning",
+    "api",
+    "integration"
+   ],
+   "requirement": "Message schemas have a version, additive changes are the norm, consumers ignore unknown fields, and the design states how a breaking change would be rolled out across producers and consumers.",
+   "question": "",
+   "evidence_hints": [
+    "schema version",
+    "compatible",
+    "registry",
+    "unknown fields"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "versioning",
+     "api",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe and Bobby Woolf",
+    "locator": "Enterprise Integration Patterns, Canonical Data Model and Message Translator",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-INT-005",
+   "title": "Database changes and published events are atomic",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "messaging",
+    "consistency",
+    "data",
+    "integration"
+   ],
+   "requirement": "Where a service both updates its database and publishes an event, the design prevents one happening without the other, for example through a transactional outbox or change data capture.",
+   "question": "",
+   "evidence_hints": [
+    "outbox",
+    "CDC",
+    "dual write",
+    "atomic",
+    "transaction log"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "data",
+     "consistency",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Chris Richardson",
+    "locator": "Microservices Patterns, Transactional Outbox",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-INT-006",
+   "title": "Long-running processes are modelled as sagas with compensation",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "messaging",
+    "consistency",
+    "integration"
+   ],
+   "requirement": "A multi-step business process across services names its steps, the compensating action for each step, and how a partially completed process is detected and resolved.",
+   "question": "",
+   "evidence_hints": [
+    "saga",
+    "compensation",
+    "orchestration",
+    "choreography",
+    "timeout"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "messaging",
+     "integration",
+     "consistency"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Chris Richardson",
+    "locator": "Microservices Patterns, Saga",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "59b8e847040bfd68"
+}

@@ -1,0 +1,212 @@
+{
+ "name": "authors-evolution-delivery",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Evolutionary architecture and continuous delivery principles. No text reused.",
+ "rules": [
+  {
+   "id": "AUT-EVO-001",
+   "title": "Fitness functions protect the characteristics the design claims",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "quality-attributes",
+    "testing"
+   ],
+   "requirement": "For each characteristic the design claims to protect, such as latency or coupling, there is an automated check named that would fail if a change violated it.",
+   "question": "",
+   "evidence_hints": [
+    "fitness function",
+    "automated check",
+    "architecture test",
+    "threshold"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Neal Ford",
+    "locator": "Building Evolutionary Architectures, Chapter 2, Fitness Functions",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-EVO-002",
+   "title": "Every change reaches production through one automated pipeline",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "delivery",
+    "deployment",
+    "testing"
+   ],
+   "requirement": "The design names the pipeline that builds, tests and deploys the service, states that no manual step alters the artifact, and shows that the same artifact is promoted through environments.",
+   "question": "",
+   "evidence_hints": [
+    "pipeline",
+    "promote",
+    "artifact",
+    "automated",
+    "environment"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "delivery",
+     "deployment"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Jez Humble and David Farley",
+    "locator": "Continuous Delivery, Chapter 5, Anatomy of the Deployment Pipeline",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-EVO-003",
+   "title": "Decisions are recorded with context, options and consequences",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "decision-record"
+   ],
+   "requirement": "Each significant decision has a record stating the context, the options considered, the choice, the consequences, and its status, so that it can be revisited later with the reasoning intact.",
+   "question": "",
+   "evidence_hints": [
+    "ADR",
+    "decision record",
+    "context",
+    "consequences",
+    "status"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Documenting Architecture Decisions, 2011",
+    "url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-EVO-004",
+   "title": "Feature flags have an owner and a removal date",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "delivery",
+    "deployment"
+   ],
+   "requirement": "Each flag used for rollout or kill switches names an owner and when it will be removed, so flags do not accumulate as permanent branches.",
+   "question": "",
+   "evidence_hints": [
+    "feature flag",
+    "toggle",
+    "kill switch",
+    "remove"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "delivery",
+     "deployment"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Pete Hodgson",
+    "locator": "Feature Toggles, martinfowler.com",
+    "url": "https://martinfowler.com/articles/feature-toggles.html",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-EVO-005",
+   "title": "Decisions are deferred to the last responsible moment where cheap",
+   "scope": "practice",
+   "target": "decision",
+   "type": "advisory",
+   "severity": "low",
+   "tags": [
+    "reversibility",
+    "decision-record"
+   ],
+   "requirement": "",
+   "question": "Which of the decisions in this document could be deferred until more is known, what would it cost to keep that option open, and why are you deciding now?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Mary and Tom Poppendieck",
+    "locator": "Lean Software Development, Chapter 3, Decide as Late as Possible",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "5667d7d6b3ce2140"
+}

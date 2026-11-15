@@ -1,0 +1,589 @@
+{
+ "name": "practice",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "How the decision-making itself shows up on the page. Check rules are pass or fail; advisory rules are questions the board asks the author and records. No text reused.",
+ "rules": [
+  {
+   "id": "PRC-DEC-001",
+   "title": "Each decision states the problem it solves, without naming the solution",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "decision-record"
+   ],
+   "requirement": "The decision's context describes the situation and the forces at play before the chosen option appears, so a reader could evaluate alternatives from the context alone.",
+   "question": "",
+   "evidence_hints": [
+    "context",
+    "problem",
+    "because",
+    "needed"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Documenting Architecture Decisions, 2011",
+    "url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-002",
+   "title": "Rejected options are listed with the reason each was rejected",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "decision-record",
+    "tradeoff"
+   ],
+   "requirement": "At least one alternative is named for the decision and the text says why it lost. A decision with no alternatives considered fails unless the text says none existed and why.",
+   "question": "",
+   "evidence_hints": [
+    "alternative",
+    "considered",
+    "rejected",
+    "instead of",
+    "option"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Andrew Harmel-Law",
+    "locator": "Facilitating Software Architecture, Chapter 6, Architectural Decision Records",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-003",
+   "title": "The trade-off is explicit, naming what was given up",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "tradeoff",
+    "quality-attributes"
+   ],
+   "requirement": "The decision names the characteristic it favours and the characteristic it sacrifices, for example consistency over availability, or simplicity over flexibility.",
+   "question": "",
+   "evidence_hints": [
+    "trade-off",
+    "at the cost of",
+    "sacrifice",
+    "favour",
+    "over"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Neal Ford",
+    "locator": "Software Architecture: The Hard Parts, Chapter 1, Trade-off analysis",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-004",
+   "title": "Reversibility is stated",
+   "scope": "practice",
+   "target": "decision",
+   "type": "advisory",
+   "severity": "medium",
+   "tags": [
+    "reversibility",
+    "decision-record"
+   ],
+   "requirement": "",
+   "question": "Is this a one-way door or a two-way door? What would it cost to reverse it in a year, and what would it cost to defer it until more is known?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe",
+    "locator": "The Software Architect Elevator, Chapter on selling options",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-005",
+   "title": "The decision traces to a business driver",
+   "scope": "practice",
+   "target": "decision",
+   "type": "advisory",
+   "severity": "low",
+   "tags": [
+    "stakeholders",
+    "decision-record"
+   ],
+   "requirement": "",
+   "question": "Which business outcome does this decision serve, and how would you explain the choice to the executive who owns that outcome in one sentence?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe",
+    "locator": "The Software Architect Elevator, riding the elevator",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-006",
+   "title": "Who was consulted and who is affected",
+   "scope": "practice",
+   "target": "decision",
+   "type": "advisory",
+   "severity": "low",
+   "tags": [
+    "stakeholders",
+    "decision-record"
+   ],
+   "requirement": "",
+   "question": "Who gave advice on this decision, which teams are affected by it, and have they seen it in this form?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Andrew Harmel-Law",
+    "locator": "Facilitating Software Architecture, Chapter 3, The Advice Process",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DEC-007",
+   "title": "Modules are deep, not pass-through",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "coupling",
+    "boundaries"
+   ],
+   "requirement": "Where the decision introduces a layer or a component, the text shows it hides meaningful complexity behind a small interface rather than forwarding calls with little added value.",
+   "question": "",
+   "evidence_hints": [
+    "layer",
+    "wrapper",
+    "interface",
+    "hides",
+    "pass-through"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "boundaries",
+     "coupling",
+     "api",
+     "domain"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "John Ousterhout",
+    "locator": "A Philosophy of Software Design, Chapter 4, Modules Should Be Deep",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-001",
+   "title": "Goals and non-goals are stated",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "decision-record"
+   ],
+   "requirement": "The document says what the system must do and explicitly what it will not do or not optimise for, so scope creep is visible.",
+   "question": "",
+   "evidence_hints": [
+    "goals",
+    "non-goals",
+    "out of scope",
+    "not"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "George Fairbanks",
+    "locator": "Just Enough Software Architecture, Chapter 3, Risk-Driven Model",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-002",
+   "title": "Quality attributes are ranked, not just listed",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "quality-attributes"
+   ],
+   "requirement": "The document names the quality attributes that matter and puts them in priority order, so trade-offs between decisions can be resolved consistently.",
+   "question": "",
+   "evidence_hints": [
+    "priority",
+    "ranked",
+    "most important",
+    "quality attribute",
+    "non-functional"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Len Bass",
+    "locator": "Software Architecture in Practice, 4th ed., Part II, Quality Attributes",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-003",
+   "title": "Stakeholders and their concerns are named",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "stakeholders"
+   ],
+   "requirement": "The document lists who has a stake in the system, such as users, operators, security, finance, and which part of the document addresses each of their concerns.",
+   "question": "",
+   "evidence_hints": [
+    "stakeholder",
+    "concern",
+    "audience",
+    "operator",
+    "user"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Paul Clements and colleagues",
+    "locator": "Documenting Software Architectures, 2nd ed., Chapter 9, Views and Beyond",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-004",
+   "title": "Design depth follows risk",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "risk"
+   ],
+   "requirement": "The riskiest parts of the system get the most design attention, and the document says which parts it deliberately leaves shallow and why.",
+   "question": "",
+   "evidence_hints": [
+    "risk",
+    "uncertain",
+    "deliberately",
+    "shallow",
+    "detail"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "George Fairbanks",
+    "locator": "Just Enough Software Architecture, Chapter 3, Risk-Driven Model",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-005",
+   "title": "The service tier is stated",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "stakeholders",
+    "reliability"
+   ],
+   "requirement": "The document says how critical the service is, for example a tier or classification, so that the expected level of reliability, monitoring and security can be read from it.",
+   "question": "",
+   "evidence_hints": [
+    "tier",
+    "criticality",
+    "customer-facing",
+    "revenue",
+    "classification"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-006",
+   "title": "Open questions and known risks are listed",
+   "scope": "practice",
+   "target": "document",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "risk"
+   ],
+   "requirement": "The document has a section listing what is undecided, what is uncertain and what could invalidate the design, each with an owner or a date.",
+   "question": "",
+   "evidence_hints": [
+    "open question",
+    "risk",
+    "unknown",
+    "TBD",
+    "assumption"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Keeling",
+    "locator": "Design It!, Chapter 5, Dig for Architecturally Significant Requirements",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-007",
+   "title": "Can the design be explained at two altitudes",
+   "scope": "practice",
+   "target": "document",
+   "type": "advisory",
+   "severity": "low",
+   "tags": [
+    "stakeholders"
+   ],
+   "requirement": "",
+   "question": "Give the two-sentence version of this design for an executive, and the two-sentence version for the engineer who will be on call for it. Do both versions say the same thing?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Gregor Hohpe",
+    "locator": "The Software Architect Elevator, Chapter 1",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "PRC-DOC-008",
+   "title": "Architectural thinking is visible, not just technology choice",
+   "scope": "practice",
+   "target": "document",
+   "type": "advisory",
+   "severity": "info",
+   "tags": [
+    "tradeoff"
+   ],
+   "requirement": "",
+   "question": "Which decision in this document would you make differently if the team were twice the size, or half? What does that tell you about which constraints are really driving the design?",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Nathaniel Schutta",
+    "locator": "Thinking Architecturally, O'Reilly report",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "7e4771879c124619"
+}

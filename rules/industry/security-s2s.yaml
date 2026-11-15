@@ -1,0 +1,110 @@
+name: industry-security-s2s
+layer: base
+version: 0.1.0
+description: Authentication and authorization between services. Zero trust, workload identity, tokens.
+rules:
+  - id: IND-SEC-S2S-001
+    title: Every internal call is authenticated, never trusted by network location
+    severity: critical
+    tags: [auth, security, identity]
+    requirement: No service accepts a call because it arrives from an internal network, a VPC, a private load balancer or a known IP range. Each call carries a verifiable identity.
+    evidence_hints: [authenticate, internal, trusted network, zero trust, identity]
+    applies_when: {tags_any: [auth, authz, identity, integration, messaging, api, network, security]}
+    compliance_refs: ["NIST-800-207 Tenet 2", "NIST-800-53 AC-3"]
+    source: {kind: public-domain, name: "NIST SP 800-207", locator: "Section 2.1, Tenets of Zero Trust", url: https://csrc.nist.gov/pubs/sp/800/207/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-002
+    title: The authentication mechanism is named per call path
+    severity: high
+    tags: [auth, security, tls]
+    requirement: For each service-to-service path the design names the mechanism, for example mutual TLS with workload certificates, OAuth 2.0 client credentials with signed tokens, or both, and which identity each side verifies.
+    evidence_hints: [mTLS, mutual TLS, client credentials, JWT, certificate, token]
+    expects: [mechanism name]
+    applies_when: {tags_any: [auth, authz, identity, integration, messaging, api, network, security]}
+    compliance_refs: ["NIST-800-204A Section 4"]
+    source: {kind: public-domain, name: "NIST SP 800-204A", locator: "Section 4, Service Mesh security capabilities", url: https://csrc.nist.gov/pubs/sp/800/204/a/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-003
+    title: Workload identity has a named issuer and trust domain
+    severity: high
+    tags: [identity, auth, security]
+    requirement: The design names what issues service identities, for example a SPIFFE and SPIRE deployment, a service mesh, or a private certificate authority, and the trust domain those identities belong to.
+    evidence_hints: [SPIFFE, SPIRE, SVID, trust domain, certificate authority, issuer]
+    applies_when: {tags_any: [auth, authz, identity, tls, security]}
+    source: {kind: public-domain, name: "NIST SP 800-204B", locator: "Section 3, Identity for microservices", url: https://csrc.nist.gov/pubs/sp/800/204/b/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-004
+    title: Certificates are short-lived and rotated automatically
+    severity: high
+    tags: [tls, identity, security, key-management]
+    requirement: Where certificates identify services, they have a short lifetime, rotation is automated, a revocation or rapid re-issue path exists, and the design says who operates the certificate authority.
+    evidence_hints: [rotation, lifetime, expiry, revocation, CA]
+    applies_when: {tags_any: [tls, identity, auth, security]}
+    compliance_refs: ["NIST-800-57 Part 1 Section 5.3"]
+    source: {kind: public-domain, name: "NIST SP 800-57 Part 1 Rev. 5", locator: "Section 5.3, Cryptoperiods", url: https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-005
+    title: Tokens are sender-constrained, or plain bearer use is justified
+    severity: high
+    tags: [auth, security, identity]
+    requirement: Where access tokens are used between services, they are bound to the sender through proof of possession, such as DPoP or certificate-bound tokens, or the design justifies plain bearer tokens with a short lifetime and a stated replay risk.
+    evidence_hints: [DPoP, proof of possession, certificate-bound, bearer, replay, lifetime]
+    applies_when: {tags_any: [auth, authz, identity, api, security]}
+    source: {kind: reference, name: "RFC 9449 OAuth 2.0 Demonstrating Proof of Possession; RFC 8705 OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens", url: https://www.rfc-editor.org/rfc/rfc9449, licence: "IETF Trust, cited only", text_reused: none}
+  - id: IND-SEC-S2S-006
+    title: Token validation checks algorithm, audience, issuer, expiry and key rotation
+    severity: high
+    scope: design
+    tags: [auth, security, api]
+    requirement: Signed tokens are validated against an algorithm allowlist, the audience and issuer are checked, expiry is enforced with a bounded clock skew, and signing keys rotate through a published key set.
+    evidence_hints: [JWT, alg, audience, issuer, exp, JWKS, rotation]
+    applies_when: {tags_any: [auth, authz, identity, api, security]}
+    source: {kind: reference, name: "RFC 8725 JSON Web Token Best Current Practices", url: https://www.rfc-editor.org/rfc/rfc8725, licence: "IETF Trust, cited only", text_reused: none}
+  - id: IND-SEC-S2S-007
+    title: Authorization is a separate policy decision with least privilege
+    severity: high
+    tags: [authz, security, identity]
+    requirement: Knowing who the caller is does not grant access. The design names the policy model, for example attribute-based or role-based, the point where policy is decided and enforced, and shows that each caller gets the minimum routes or operations it needs.
+    evidence_hints: [authorization, policy, RBAC, ABAC, least privilege, policy decision point]
+    applies_when: {tags_any: [auth, authz, identity, api, security]}
+    compliance_refs: ["NIST-800-53 AC-6", "NIST-800-204B Section 4"]
+    source: {kind: public-domain, name: "NIST SP 800-204B", locator: "Section 4, Attribute-based access control for microservices", url: https://csrc.nist.gov/pubs/sp/800/204/b/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-008
+    title: End-user identity is carried across hops, not replaced by service identity
+    severity: medium
+    tags: [auth, authz, identity, security]
+    requirement: Where a request on behalf of a user crosses several services, the design says how the user's identity and permissions reach the last service, for example through token exchange, so that a downstream service is not acting with the caller's broader privileges.
+    evidence_hints: [on behalf of, token exchange, propagate, user context, confused deputy]
+    applies_when: {tags_any: [auth, authz, identity, integration, api]}
+    source: {kind: reference, name: "RFC 8693 OAuth 2.0 Token Exchange", url: https://www.rfc-editor.org/rfc/rfc8693, licence: "IETF Trust, cited only", text_reused: none}
+  - id: IND-SEC-S2S-009
+    title: Default deny between services
+    severity: high
+    tags: [authz, network, security]
+    requirement: Service-to-service policy denies by default and allows only named pairs or named operations, whether enforced by a mesh, network policy or application policy.
+    evidence_hints: [default deny, allowlist, network policy, mesh policy, STRICT]
+    applies_when: {tags_any: [auth, authz, network, security, integration]}
+    compliance_refs: ["NIST-800-207 Tenet 4"]
+    source: {kind: public-domain, name: "NIST SP 800-207", locator: "Section 2.1, Tenets of Zero Trust", url: https://csrc.nist.gov/pubs/sp/800/207/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-010
+    title: No static credentials in configuration or images
+    severity: high
+    tags: [secrets, security]
+    requirement: Credentials are obtained from a secret store or issued dynamically, never baked into images or committed in configuration, and the design names the rotation period.
+    evidence_hints: [secret store, vault, rotation, hard-coded, environment]
+    applies_when: {tags_any: [secrets, auth, security, deployment]}
+    compliance_refs: ["NIST-800-53 IA-5"]
+    source: {kind: public-domain, name: "NIST SP 800-53 Rev. 5", locator: "IA-5 Authenticator Management", url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-011
+    title: Administrative and internal endpoints are not reachable through the public path
+    severity: high
+    tags: [security, api, network]
+    requirement: Endpoints used for administration, debugging or internal integration are not exposed through the public gateway and require stronger authentication than user endpoints.
+    evidence_hints: [admin, internal endpoint, gateway, exposed, management]
+    applies_when: {tags_any: [api, network, security]}
+    source: {kind: public-domain, name: "NIST SP 800-53 Rev. 5", locator: "AC-17 Remote Access, SC-7 Boundary Protection", url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final, licence: public domain (US government work)}
+  - id: IND-SEC-S2S-012
+    title: Transport uses current TLS with strong cipher suites
+    severity: high
+    tags: [tls, security, encryption]
+    requirement: Connections use TLS 1.2 or later with cipher suites recommended by current guidance, older protocol versions are disabled, and the design says where TLS is terminated.
+    evidence_hints: [TLS 1.2, TLS 1.3, cipher, terminate]
+    applies_when: {tags_any: [tls, security, network, api, encryption]}
+    compliance_refs: ["NIST-800-52 Section 3"]
+    source: {kind: public-domain, name: "NIST SP 800-52 Rev. 2", locator: "Section 3, Minimum requirements for TLS servers", url: https://csrc.nist.gov/pubs/sp/800/52/r2/final, licence: public domain (US government work)}

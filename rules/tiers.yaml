@@ -1,0 +1,7 @@
+# Target maturity level per service tier. Override in a company pack folder with your own tiers.yaml.
+# Tier 1 is the most critical (customer-facing, revenue-bearing, regulated).
+targets:
+  "1": 3
+  "2": 2
+  "3": 2
+  default: 2

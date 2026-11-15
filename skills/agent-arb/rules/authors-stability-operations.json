@@ -1,0 +1,217 @@
+{
+ "name": "authors-stability-operations",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Stability and operations principles. No text reused.",
+ "rules": [
+  {
+   "id": "AUT-STAB-001",
+   "title": "Integration points are treated as the primary source of failure",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "resilience",
+    "failure",
+    "integration"
+   ],
+   "requirement": "Every call to another system is wrapped with a timeout, a failure response, and a way to stop calling when the other side is unhealthy, because integration points are where cascading failures start.",
+   "question": "",
+   "evidence_hints": [
+    "integration point",
+    "cascading",
+    "timeout",
+    "circuit"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "integration",
+     "resilience",
+     "failure",
+     "api",
+     "messaging"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Release It! 2nd ed., Chapter 4, Stability Antipatterns: Integration Points",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STAB-002",
+   "title": "Steady state is designed, so nothing grows without bound",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "capacity",
+    "data"
+   ],
+   "requirement": "Logs, caches, tables and queues each have a mechanism that keeps them bounded over time without human intervention, such as rotation, eviction or archival.",
+   "question": "",
+   "evidence_hints": [
+    "rotation",
+    "eviction",
+    "archive",
+    "purge",
+    "unbounded"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Release It! 2nd ed., Stability patterns: Steady State",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STAB-003",
+   "title": "Four key delivery metrics are known for the service",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "delivery",
+    "deployment"
+   ],
+   "requirement": "The design or its operating plan names how deployment frequency, lead time for changes, change failure rate and time to restore are measured for this service.",
+   "question": "",
+   "evidence_hints": [
+    "deployment frequency",
+    "lead time",
+    "change failure",
+    "restore"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": 2
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Nicole Forsgren",
+    "locator": "Accelerate, Chapter 2, Measuring Performance",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STAB-004",
+   "title": "Toil is identified and has a reduction plan",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "delivery"
+   ],
+   "requirement": "Manual, repetitive operational work the design will create is named, and either automated in the design or scheduled for automation.",
+   "question": "",
+   "evidence_hints": [
+    "manual",
+    "toil",
+    "runbook automation",
+    "operator"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "reference",
+    "name": "Site Reliability Engineering (Google), Chapter 5, Eliminating Toil",
+    "locator": "",
+    "url": "https://sre.google/sre-book/eliminating-toil/",
+    "licence": "CC BY-NC-ND 4.0, cited only",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-STAB-005",
+   "title": "Capacity and failure assumptions are revisited after incidents",
+   "scope": "practice",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "delivery",
+    "resilience"
+   ],
+   "requirement": "The operating plan names a blameless review for incidents and a path for its findings to change the design.",
+   "question": "",
+   "evidence_hints": [
+    "postmortem",
+    "incident review",
+    "blameless",
+    "action item"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": 2
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "reference",
+    "name": "Site Reliability Engineering (Google), Chapter 15, Postmortem Culture",
+    "locator": "",
+    "url": "https://sre.google/sre-book/postmortem-culture/",
+    "licence": "CC BY-NC-ND 4.0, cited only",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "f495b480e8870bda"
+}

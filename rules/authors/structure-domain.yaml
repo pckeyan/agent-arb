@@ -1,0 +1,55 @@
+name: authors-structure-domain
+layer: base
+version: 0.1.0
+description: Boundaries, domains and system structure. No text reused.
+rules:
+  - id: AUT-STR-001
+    title: Service boundaries follow bounded contexts
+    severity: high
+    tags: [domain, boundaries, coupling]
+    requirement: Each service owns a coherent part of the domain with its own model and language, and the design names the contexts and how terms are translated at their borders.
+    evidence_hints: [bounded context, domain, ubiquitous language, anti-corruption]
+    applies_when: {tags_any: [domain, boundaries, coupling, integration]}
+    source: {kind: author-principle, name: Eric Evans, locator: "Domain-Driven Design, Chapter 14, Maintaining Model Integrity", text_reused: none}
+  - id: AUT-STR-002
+    title: Each piece of data has exactly one owning service
+    severity: high
+    tags: [data, boundaries, coupling]
+    requirement: No two services write the same table or record. The design names the owner of each data set and how other services obtain copies or ask for changes.
+    evidence_hints: [owner, shared database, single writer, copy]
+    applies_when: {tags_any: [data, boundaries, storage, integration]}
+    source: {kind: author-principle, name: Sam Newman, locator: "Building Microservices, 2nd ed., Chapter 4, Microservice Communication Styles, and Chapter 6, Workflow", text_reused: none}
+  - id: AUT-STR-003
+    title: Distribution is justified, not assumed
+    severity: medium
+    scope: practice
+    tags: [boundaries, coupling]
+    requirement: For each network boundary introduced, the design states the benefit that outweighs the added latency, failure modes and operational cost, since the first rule of distributed objects is not to distribute them.
+    evidence_hints: [why separate, boundary, monolith, latency, operational]
+    source: {kind: author-principle, name: Martin Fowler, locator: "Patterns of Enterprise Application Architecture, Chapter 7, Distribution Strategies", text_reused: none}
+  - id: AUT-STR-004
+    title: Migrations use incremental replacement with a kill switch
+    severity: medium
+    tags: [delivery, deployment, coupling]
+    requirement: Where an existing system is replaced, traffic is moved in slices behind a facade or router, each slice can be reverted independently, and the old path is retired only after the new one has proven itself.
+    evidence_hints: [strangler, facade, incremental, cut over, revert]
+    applies_when: {tags_any: [delivery, deployment, integration]}
+    source: {kind: author-principle, name: Martin Fowler, locator: "StranglerFigApplication, martinfowler.com", url: https://martinfowler.com/bliki/StranglerFigApplication.html, text_reused: none}
+  - id: AUT-STR-005
+    title: Architecture characteristics are ranked and traded explicitly
+    severity: medium
+    scope: practice
+    target: document
+    tags: [quality-attributes, tradeoff]
+    requirement: The document ranks the characteristics that matter most for this system, such as availability, elasticity, security and evolvability, and the decisions reference that ranking when they trade one against another.
+    evidence_hints: [characteristics, priority, trade-off, "-ilities"]
+    source: {kind: author-principle, name: Mark Richards and Neal Ford, locator: "Fundamentals of Software Architecture, Chapters 4 to 6, Architecture Characteristics", text_reused: none}
+  - id: AUT-STR-006
+    title: Diagrams use consistent abstraction levels with a legend
+    severity: low
+    scope: practice
+    target: document
+    tags: [diagrams]
+    requirement: Each diagram sits at one level, such as system context, containers or components, mixes no levels, and has a legend or consistent notation for boxes and lines.
+    evidence_hints: [diagram, context, container, component, legend]
+    source: {kind: cc-by, name: The C4 model, locator: Abstractions and diagrams, url: https://c4model.com/, licence: CC BY 4.0, text_reused: adapted}

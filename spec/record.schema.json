@@ -1,0 +1,422 @@
+{
+  "$defs": {
+    "AdvisoryAnswer": {
+      "properties": {
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Decision Id"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "answer": {
+          "default": "",
+          "title": "Answer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "decision_id",
+        "question"
+      ],
+      "title": "AdvisoryAnswer",
+      "type": "object"
+    },
+    "ComplianceRow": {
+      "properties": {
+        "framework": {
+          "title": "Framework",
+          "type": "string"
+        },
+        "reference": {
+          "title": "Reference",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Decision Id"
+        },
+        "verdict": {
+          "title": "Verdict",
+          "type": "string"
+        },
+        "disposition": {
+          "title": "Disposition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "framework",
+        "reference",
+        "rule_id",
+        "decision_id",
+        "verdict",
+        "disposition"
+      ],
+      "title": "ComplianceRow",
+      "type": "object"
+    },
+    "Decision": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "section_ref": {
+          "title": "Section Ref",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope",
+          "default": "architecture"
+        },
+        "context": {
+          "default": "",
+          "title": "Context",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/Option"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "chosen": {
+          "default": "",
+          "title": "Chosen",
+          "type": "string"
+        },
+        "implications": {
+          "default": "",
+          "title": "Implications",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "default": "",
+          "title": "Evidence Quote",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "data_classes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Data Classes",
+          "type": "array"
+        },
+        "confirmed": {
+          "default": false,
+          "title": "Confirmed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "section_ref"
+      ],
+      "title": "Decision",
+      "type": "object"
+    },
+    "Finding": {
+      "properties": {
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Decision Id"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail",
+            "unclear"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "quote": {
+          "default": "",
+          "title": "Quote",
+          "type": "string"
+        },
+        "explanation": {
+          "default": "",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "verified": {
+          "default": false,
+          "title": "Verified",
+          "type": "boolean"
+        },
+        "disposition": {
+          "default": "open",
+          "enum": [
+            "open",
+            "accepted",
+            "disputed",
+            "revised",
+            "waived"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "rationale": {
+          "default": "",
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "decision_id",
+        "verdict",
+        "severity"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "Layer": {
+      "enum": [
+        "base",
+        "company",
+        "project"
+      ],
+      "title": "Layer",
+      "type": "string"
+    },
+    "LevelSummary": {
+      "properties": {
+        "area": {
+          "title": "Area",
+          "type": "string"
+        },
+        "observed": {
+          "title": "Observed",
+          "type": "integer"
+        },
+        "target": {
+          "title": "Target",
+          "type": "integer"
+        },
+        "missing_rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Rule Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "area",
+        "observed",
+        "target"
+      ],
+      "title": "LevelSummary",
+      "type": "object"
+    },
+    "Option": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "tradeoff": {
+          "default": "",
+          "title": "Tradeoff",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Option",
+      "type": "object"
+    },
+    "PackRef": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "layer": {
+          "$ref": "#/$defs/Layer"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "rule_count": {
+          "title": "Rule Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "layer",
+        "version",
+        "content_hash",
+        "rule_count"
+      ],
+      "title": "PackRef",
+      "type": "object"
+    },
+    "Scope": {
+      "enum": [
+        "architecture",
+        "design",
+        "implementation",
+        "practice"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "engine": {
+      "title": "Engine",
+      "type": "string"
+    },
+    "engine_version": {
+      "title": "Engine Version",
+      "type": "string"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "document": {
+      "title": "Document",
+      "type": "string"
+    },
+    "tier": {
+      "title": "Tier",
+      "type": "integer"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "packs": {
+      "items": {
+        "$ref": "#/$defs/PackRef"
+      },
+      "title": "Packs",
+      "type": "array"
+    },
+    "decisions": {
+      "items": {
+        "$ref": "#/$defs/Decision"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "advisories": {
+      "items": {
+        "$ref": "#/$defs/AdvisoryAnswer"
+      },
+      "title": "Advisories",
+      "type": "array"
+    },
+    "levels": {
+      "items": {
+        "$ref": "#/$defs/LevelSummary"
+      },
+      "title": "Levels",
+      "type": "array"
+    },
+    "compliance": {
+      "items": {
+        "$ref": "#/$defs/ComplianceRow"
+      },
+      "title": "Compliance",
+      "type": "array"
+    },
+    "service_levels": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Service Levels",
+      "type": "array"
+    }
+  },
+  "required": [
+    "engine",
+    "engine_version",
+    "model",
+    "document",
+    "tier"
+  ],
+  "title": "Record",
+  "type": "object"
+}

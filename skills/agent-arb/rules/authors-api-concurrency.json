@@ -1,0 +1,358 @@
+{
+ "name": "authors-api-concurrency",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "API, concurrency and code design principles. Design and implementation scope, so they fire only on sections that describe interfaces or concurrency. No text reused.",
+ "rules": [
+  {
+   "id": "AUT-API-001",
+   "title": "Public interfaces are minimal and hard to misuse",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "api",
+    "versioning"
+   ],
+   "requirement": "The interface exposes only what callers need, defaults are safe, invalid states are unrepresentable where practical, and the design says which parts are stable contract and which are not.",
+   "question": "",
+   "evidence_hints": [
+    "interface",
+    "contract",
+    "minimal",
+    "default",
+    "immutable"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "api",
+     "versioning",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Joshua Bloch",
+    "locator": "How to Design a Good API and Why it Matters, 2006 talk; Effective Java, 3rd ed.",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-API-002",
+   "title": "Compatibility rules for the interface are stated",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "api",
+    "versioning"
+   ],
+   "requirement": "The design says what counts as a breaking change, how versions are signalled, how long old versions are supported, and how deprecation is communicated.",
+   "question": "",
+   "evidence_hints": [
+    "breaking change",
+    "version",
+    "deprecate",
+    "compatible"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "api",
+     "versioning",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Joshua Bloch",
+    "locator": "Effective Java, 3rd ed., Item 15 and API design talk, compatibility",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-API-003",
+   "title": "Errors fail fast with actionable detail and no leakage",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "api",
+    "failure"
+   ],
+   "requirement": "The interface reports invalid input immediately, error responses say what went wrong in terms the caller can act on, and never expose internals such as stack traces or secrets.",
+   "question": "",
+   "evidence_hints": [
+    "error response",
+    "fail fast",
+    "validation",
+    "stack trace"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "api",
+     "integration"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Joshua Bloch",
+    "locator": "Effective Java, 3rd ed., Item 49, Check parameters for validity",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-CONC-001",
+   "title": "Shared mutable state is confined or immutable",
+   "scope": "implementation",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "concurrency",
+    "threads"
+   ],
+   "requirement": "The design names what state is shared between threads or workers, and for each either confines it to one owner, makes it immutable, or names the synchronisation that guards it.",
+   "question": "",
+   "evidence_hints": [
+    "thread-safe",
+    "immutable",
+    "confined",
+    "lock",
+    "synchronized",
+    "shared state"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "concurrency",
+     "threads",
+     "performance"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Brian Goetz with Tim Peierls",
+    "locator": "Java Concurrency in Practice, Chapters 2 and 3",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-CONC-002",
+   "title": "Thread pools and queues are bounded and sized with a reason",
+   "scope": "implementation",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "concurrency",
+    "threads",
+    "backpressure",
+    "capacity"
+   ],
+   "requirement": "Each executor or worker pool has a stated size with the reasoning behind it, a bounded work queue, and a named rejection policy when the queue is full.",
+   "question": "",
+   "evidence_hints": [
+    "thread pool",
+    "bounded queue",
+    "rejection",
+    "executor",
+    "pool size"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "concurrency",
+     "threads",
+     "backpressure",
+     "capacity"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Brian Goetz and colleagues",
+    "locator": "Java Concurrency in Practice, Chapter 8, Applying Thread Pools",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-CONC-003",
+   "title": "Blocking is avoided on the paths that must scale",
+   "scope": "implementation",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "concurrency",
+    "performance",
+    "scalability"
+   ],
+   "requirement": "Request-serving paths do not block a scarce thread on I/O or on a lock held across a remote call. The design names the non-blocking or reactor style used, or shows that threads are plentiful enough for a blocking model.",
+   "question": "",
+   "evidence_hints": [
+    "non-blocking",
+    "reactor",
+    "event loop",
+    "virtual threads",
+    "blocking"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "concurrency",
+     "performance",
+     "scalability"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Doug Lea",
+    "locator": "Scalable IO in Java, 2003; Concurrent Programming in Java, 2nd ed.",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-CONC-004",
+   "title": "Locks have the smallest scope and a consistent order",
+   "scope": "implementation",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "concurrency",
+    "threads"
+   ],
+   "requirement": "Where locks are used, each guards one clearly named invariant, is held for the shortest time, never across a remote call, and locks taken together are taken in one documented order.",
+   "question": "",
+   "evidence_hints": [
+    "lock order",
+    "deadlock",
+    "critical section",
+    "held"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "concurrency",
+     "threads"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Doug Lea",
+    "locator": "Concurrent Programming in Java, 2nd ed., Chapter 2, Exclusion",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "AUT-API-004",
+   "title": "Simplicity, robustness and portability are stated design goals",
+   "scope": "practice",
+   "target": "decision",
+   "type": "advisory",
+   "severity": "info",
+   "tags": [
+    "tradeoff"
+   ],
+   "requirement": "",
+   "question": "Where in this design did you choose simplicity over cleverness, and where did you choose portability over a platform-specific feature? Name one of each.",
+   "evidence_hints": [],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "James Gosling",
+    "locator": "The Java Language Environment white paper, 1996, design goals",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "c11d271aa67a91cc"
+}

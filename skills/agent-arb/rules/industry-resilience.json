@@ -1,0 +1,343 @@
+{
+ "name": "industry-resilience",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "How the system behaves when a dependency misbehaves.",
+ "rules": [
+  {
+   "id": "IND-RES-001",
+   "title": "Every outbound call has an explicit timeout",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "resilience",
+    "timeout",
+    "failure"
+   ],
+   "requirement": "Each call to a dependency names a timeout chosen for that dependency, and the design says what the caller does when it fires. Library defaults do not count.",
+   "question": "",
+   "evidence_hints": [
+    "timeout",
+    "deadline",
+    "ms",
+    "seconds"
+   ],
+   "expects": [
+    "timeout value"
+   ],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 1,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Release It! 2nd ed., Stability patterns: Timeouts",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-002",
+   "title": "Retries have backoff, jitter and a budget, and only wrap idempotent calls",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "resilience",
+    "retry",
+    "idempotency"
+   ],
+   "requirement": "Where a call is retried, the policy states the backoff, that jitter is applied, the maximum attempts or a retry budget, and shows that the retried operation is idempotent or made so with an idempotency key.",
+   "question": "",
+   "evidence_hints": [
+    "retry",
+    "backoff",
+    "jitter",
+    "idempotent",
+    "attempts"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 2,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-003",
+   "title": "Isolate dependencies with circuit breakers or bulkheads",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "failure",
+    "coupling"
+   ],
+   "requirement": "A slow or failing dependency cannot exhaust the caller's threads, connections or queue. The design names the isolation mechanism, for example a circuit breaker per dependency or a separate pool per dependency.",
+   "question": "",
+   "evidence_hints": [
+    "circuit breaker",
+    "bulkhead",
+    "pool",
+    "isolation"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 2,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Release It! 2nd ed., Stability patterns: Circuit Breaker and Bulkheads",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-004",
+   "title": "Define degraded behaviour per dependency",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "failure",
+    "availability"
+   ],
+   "requirement": "For each dependency the design states what the user sees when it is unavailable, for example a cached answer, a reduced feature, or a clear error, rather than leaving the behaviour to whatever the failure produces.",
+   "question": "",
+   "evidence_hints": [
+    "degrade",
+    "fallback",
+    "cached",
+    "feature flag",
+    "unavailable"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 2,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Azure Well-Architected Framework",
+    "locator": "Reliability",
+    "url": "https://learn.microsoft.com/azure/well-architected/reliability/self-preservation",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-005",
+   "title": "Bound every queue and shed load deliberately",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "resilience",
+    "backpressure",
+    "capacity"
+   ],
+   "requirement": "Queues and buffers have a maximum size, the design says what happens when they are full, and under overload the system sheds or rejects work in a stated order rather than slowing down for everyone.",
+   "question": "",
+   "evidence_hints": [
+    "bounded",
+    "queue depth",
+    "backpressure",
+    "load shedding",
+    "reject"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 2,
+   "compliance_refs": [],
+   "source": {
+    "kind": "author-principle",
+    "name": "Michael Nygard",
+    "locator": "Release It! 2nd ed., Stability patterns: Fail Fast and Shed Load",
+    "url": "",
+    "licence": "",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-006",
+   "title": "Enumerate failure modes, not just the happy path",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "failure",
+    "reliability"
+   ],
+   "requirement": "The design lists how each dependency and each component can fail and what the system does in each case. A design that describes only successful flows fails this rule.",
+   "question": "",
+   "evidence_hints": [
+    "failure mode",
+    "when",
+    "fails",
+    "unavailable",
+    "partial"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 1,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-007",
+   "title": "Exercise failure behaviour, do not assume it",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "testing",
+    "failure"
+   ],
+   "requirement": "The design names how failure handling is tested, for example fault injection, dependency outage drills, or game days, and how often.",
+   "question": "",
+   "evidence_hints": [
+    "chaos",
+    "fault injection",
+    "game day",
+    "drill"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": 2
+   },
+   "level": 3,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Azure Well-Architected Framework",
+    "locator": "Reliability",
+    "url": "https://learn.microsoft.com/azure/well-architected/reliability/testing-strategy",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-RES-008",
+   "title": "Protect against retry storms and thundering herds",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "resilience",
+    "retry",
+    "capacity"
+   ],
+   "requirement": "When many clients recover at once, the design prevents a synchronized surge, for example through jittered reconnects, token buckets on the server, or staged recovery.",
+   "question": "",
+   "evidence_hints": [
+    "retry storm",
+    "thundering herd",
+    "jitter",
+    "rate limit"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": 3,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "2152a538d6e12b6c"
+}

@@ -1,0 +1,103 @@
+{
+  "$defs": {
+    "Option": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "tradeoff": {
+          "default": "",
+          "title": "Tradeoff",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Option",
+      "type": "object"
+    },
+    "Scope": {
+      "enum": [
+        "architecture",
+        "design",
+        "implementation",
+        "practice"
+      ],
+      "title": "Scope",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "section_ref": {
+      "title": "Section Ref",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/Scope",
+      "default": "architecture"
+    },
+    "context": {
+      "default": "",
+      "title": "Context",
+      "type": "string"
+    },
+    "options": {
+      "items": {
+        "$ref": "#/$defs/Option"
+      },
+      "title": "Options",
+      "type": "array"
+    },
+    "chosen": {
+      "default": "",
+      "title": "Chosen",
+      "type": "string"
+    },
+    "implications": {
+      "default": "",
+      "title": "Implications",
+      "type": "string"
+    },
+    "evidence_quote": {
+      "default": "",
+      "title": "Evidence Quote",
+      "type": "string"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "data_classes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Data Classes",
+      "type": "array"
+    },
+    "confirmed": {
+      "default": false,
+      "title": "Confirmed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "section_ref"
+  ],
+  "title": "Decision",
+  "type": "object"
+}

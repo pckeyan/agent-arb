@@ -1,0 +1,39 @@
+name: acme-overrides
+layer: company
+version: 1.0.0
+description: Fictional company pack showing the three override modes. Already approved so it can be used directly.
+rules:
+  - id: ACME-REL-001
+    title: Tier 1 services run in three availability zones
+    severity: high
+    tags: [availability, multi-region, reliability]
+    requirement: Any tier 1 service is deployed across at least three availability zones, and the design states behaviour on loss of one zone.
+    evidence_hints: [availability zone, three, zone loss]
+    applies_when: {min_tier: 1}
+    overrides: {mode: tightens, rule: IND-REL-003, reason: Acme requires three zones for tier 1, not two.}
+    source: {kind: company, name: Acme platform standards, locator: Reliability, text_reused: adapted}
+    status: approved
+    reviewed_by: platform-architecture
+    reviewed_on: "2026-11-01"
+  - id: ACME-SEC-001
+    title: Internal traffic uses the Acme platform CA for mutual TLS
+    severity: critical
+    tags: [auth, tls, identity, security]
+    requirement: Service-to-service calls use mutual TLS with certificates issued by the Acme platform CA, valid for at most one hour. Token-only authentication between services is not permitted.
+    evidence_hints: [mTLS, Acme platform CA, certificate]
+    applies_when: {tags_any: [auth, authz, identity, tls, security, integration, api]}
+    overrides: {mode: supersedes, rule: IND-SEC-S2S-002, reason: Acme mandates one mechanism.}
+    source: {kind: company, name: Acme platform standards, locator: Security, text_reused: adapted}
+    status: approved
+    reviewed_by: security-architecture
+    reviewed_on: "2026-11-01"
+  - id: ACME-COST-001
+    title: Cost driver rule waived for internal tooling
+    severity: info
+    tags: [cost]
+    requirement: Not applicable.
+    overrides: {mode: waives, rule: IND-COST-002, reason: Internal tools are reviewed for cost at the platform level, not per design.}
+    source: {kind: company, name: Acme platform standards, locator: Finance, text_reused: none}
+    status: approved
+    reviewed_by: finops
+    reviewed_on: "2026-11-01"

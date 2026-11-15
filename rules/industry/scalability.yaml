@@ -1,0 +1,35 @@
+name: industry-scalability
+layer: base
+version: 0.1.0
+description: Capacity, scaling and performance under load.
+rules:
+  - id: IND-SCA-001
+    title: State expected load and the headroom designed for
+    severity: medium
+    tags: [scalability, capacity, performance]
+    requirement: The design states expected request rates, data volumes and growth, and the multiple of that load the system is sized to absorb before scaling action is needed.
+    evidence_hints: [requests per second, throughput, peak, growth, headroom]
+    expects: [load figure]
+    source: {kind: cc-by, name: Azure Well-Architected Framework, locator: Performance efficiency, capacity planning, url: https://learn.microsoft.com/azure/well-architected/performance-efficiency/capacity-planning, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-SCA-002
+    title: Identify the first bottleneck and the scaling unit
+    severity: medium
+    tags: [scalability, capacity]
+    requirement: The design names which component saturates first, what the unit of scaling is for it, and whether scaling is automatic or manual.
+    evidence_hints: [bottleneck, scale out, autoscale, shard, partition]
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Performance optimization, plan for scale, url: https://docs.cloud.google.com/architecture/framework/performance-optimization, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-SCA-003
+    title: Keep request-serving components stateless or state-partitioned
+    severity: medium
+    tags: [scalability, storage, availability]
+    requirement: Components that scale horizontally hold no session or request state locally, or the design explains how state is partitioned and rebalanced.
+    evidence_hints: [stateless, session, sticky, partition]
+    source: {kind: mit, name: The Twelve-Factor App, locator: Factor VI, Processes, url: https://12factor.net/processes, licence: MIT, text_reused: none}
+  - id: IND-SCA-004
+    title: Prove the latency objective at expected peak
+    severity: medium
+    tags: [performance, latency, testing, capacity]
+    requirement: The design names a load test or capacity test that demonstrates the latency percentiles hold at the expected peak, not just at idle.
+    evidence_hints: [load test, capacity test, p99, peak]
+    applies_when: {min_tier: 2}
+    source: {kind: cc-by, name: Azure Well-Architected Framework, locator: Performance efficiency, performance testing, url: https://learn.microsoft.com/azure/well-architected/performance-efficiency/performance-test, licence: CC BY 4.0, text_reused: adapted}

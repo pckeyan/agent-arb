@@ -1,0 +1,106 @@
+name: industry-security-pci
+layer: base
+version: 0.1.0
+description: Cardholder data in transit and at rest. Written in Agent ARB's own words; PCI DSS requirement numbers are references only. Fires only when a decision handles cardholder data.
+rules:
+  - id: IND-SEC-PCI-001
+    title: Inventory the cardholder data elements each flow touches
+    severity: critical
+    tags: [pci, cardholder-data, data, security]
+    requirement: Each flow that handles payment card data lists which elements it touches, such as the primary account number, cardholder name, expiry date and service code, and whether any sensitive authentication data such as the full track, card verification code or PIN is ever present.
+    evidence_hints: [PAN, cardholder, CVV, CVC, track, PIN, expiry]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.2.1"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 3", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-002
+    title: Sensitive authentication data is never stored after authorisation
+    severity: critical
+    tags: [pci, cardholder-data, data, security]
+    requirement: Card verification codes, full track data and PIN data are not stored after authorisation in any form, including encrypted, in queues, caches, logs or crash dumps, and the design shows where they are discarded.
+    evidence_hints: [CVV, track data, PIN, not stored, discard, after authorization]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.3.1"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 3.3", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-003
+    title: The primary account number is unreadable wherever it is stored
+    severity: critical
+    tags: [pci, cardholder-data, encryption, data]
+    requirement: Stored account numbers are tokenised, truncated, encrypted with strong cryptography, or hashed with a keyed cryptographic hash. Plain hashing or reversible encoding fails. The design names the method and where it is applied.
+    evidence_hints: [tokenization, tokenisation, truncation, encrypted at rest, keyed hash, HMAC]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.5.1", "PCI-DSS-v4.0.1 3.5.1.1"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 3.5", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-004
+    title: Account numbers are protected in transit everywhere
+    severity: critical
+    tags: [pci, cardholder-data, tls, encryption]
+    requirement: Account numbers cross any untrusted network only under TLS 1.2 or later with strong cipher suites, and under zero trust the same applies on internal networks. The design names where encryption starts and ends.
+    evidence_hints: [TLS, in transit, encrypted, public network, end to end]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 4.2.1", "NIST-800-52 Section 3"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 4.2", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-005
+    title: Encryption keys are managed, separated and rotated
+    severity: critical
+    tags: [pci, key-management, encryption, security]
+    requirement: Data-encrypting keys are protected by separate key-encrypting keys, keys live in a key management service or hardware module, rotation periods are stated, and key custodians operate under split knowledge and dual control.
+    evidence_hints: [KMS, HSM, key rotation, envelope, key-encrypting key, custodian, dual control]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.6.1", "PCI-DSS-v4.0.1 3.7.4", "PCI-DSS-v4.0.1 3.7.6", "NIST-800-57 Part 1 Section 5"]
+    source: {kind: public-domain, name: "NIST SP 800-57 Part 1 Rev. 5", locator: "Section 5, General Key Management Guidance", url: https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final, licence: public domain (US government work)}
+  - id: IND-SEC-PCI-006
+    title: Account numbers are masked when displayed
+    severity: high
+    scope: design
+    tags: [pci, cardholder-data, api]
+    requirement: Any display or API response shows at most the bank identification number and the last four digits, and anyone who sees more has a documented business need.
+    evidence_hints: [masked, last four, BIN, display, redact]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.4.1"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 3.4", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-007
+    title: Account numbers never reach logs, traces, metrics or error reports
+    severity: critical
+    scope: design
+    tags: [pci, cardholder-data, logging, observability]
+    requirement: Telemetry pipelines scrub or never receive account numbers, including structured log fields, trace attributes, metric labels, exception messages and request captures, and the design names the scrubbing point.
+    evidence_hints: [scrub, redact, log, trace, mask, PAN]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.5.1", "PCI-DSS-v4.0.1 10.2"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirements 3 and 10", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-008
+    title: The cardholder data environment boundary is drawn and reduced
+    severity: high
+    tags: [pci, cardholder-data, network, security]
+    requirement: The design draws the boundary of the environment that stores, processes or transmits cardholder data, describes how it is segmented from the rest, and states how scope is reduced, for example by tokenising at the edge or using a third-party processor.
+    evidence_hints: [CDE, scope, segmentation, tokenize, processor, boundary]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 1.3", "PCI-DSS-v4.0.1 12.5.2"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirements 1 and 12", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-009
+    title: Retention of account data is limited and deletion is real
+    severity: high
+    tags: [pci, cardholder-data, data]
+    requirement: Account data is kept only as long as a stated business or legal reason requires, a deletion mechanism exists and runs, and it reaches backups and replicas.
+    evidence_hints: [retention, delete, purge, backup]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.2.1"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirement 3.2", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-010
+    title: Access to cardholder data is need-to-know with multi-factor administration
+    severity: high
+    tags: [pci, cardholder-data, authz, security]
+    requirement: Only roles with a stated need can read account data, administrative access into the cardholder data environment requires multi-factor authentication, and access is logged.
+    evidence_hints: [need to know, MFA, multi-factor, admin, access]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 7.2", "PCI-DSS-v4.0.1 8.4.2"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirements 7 and 8", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}
+  - id: IND-SEC-PCI-011
+    title: Backups are encrypted and non-production never holds real account numbers
+    severity: high
+    tags: [pci, cardholder-data, backup, testing]
+    requirement: Backups containing account data are encrypted with managed keys, and test, staging and analytics environments use tokenised or synthetic card data only.
+    evidence_hints: [backup encrypted, synthetic, test data, staging, tokenized]
+    applies_when: {data_classes: [cardholder-data]}
+    compliance_refs: ["PCI-DSS-v4.0.1 3.5.1", "PCI-DSS-v4.0.1 6.5.5"]
+    source: {kind: reference, name: "PCI DSS v4.0.1 Requirements 3 and 6", url: https://www.pcisecuritystandards.org/, licence: "PCI SSC, cited only", text_reused: none}

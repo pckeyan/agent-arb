@@ -1,0 +1,19 @@
+name: industry-cost
+layer: base
+version: 0.1.0
+description: Cost awareness in design.
+rules:
+  - id: IND-COST-001
+    title: Attribute cost to an owner and a unit
+    severity: low
+    tags: [cost]
+    requirement: The design says how the system's cost is tagged or allocated, who owns it, and what the unit cost is measured against, for example cost per request or per tenant.
+    evidence_hints: [cost, budget, tag, allocation, unit economics]
+    source: {kind: cc-by, name: FinOps Framework, locator: "Capabilities: Allocation, Unit Economics", url: https://www.finops.org/framework/, licence: CC BY 4.0, text_reused: adapted}
+  - id: IND-COST-002
+    title: Name the largest cost driver and how it scales
+    severity: low
+    tags: [cost, scalability]
+    requirement: The design identifies the component or data flow that dominates cost and states whether that cost grows linearly, step-wise or not at all with load.
+    evidence_hints: [cost driver, egress, storage cost, compute cost]
+    source: {kind: cc-by, name: Google Cloud Architecture Framework, locator: Cost optimization, url: https://docs.cloud.google.com/architecture/framework/cost-optimization, licence: CC BY 4.0, text_reused: adapted}

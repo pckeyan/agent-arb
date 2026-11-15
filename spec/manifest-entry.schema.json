@@ -1,0 +1,53 @@
+{
+  "properties": {
+    "step": {
+      "title": "Step",
+      "type": "string"
+    },
+    "decision_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision Id"
+    },
+    "sections": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sections",
+      "type": "array"
+    },
+    "rule_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rule Ids",
+      "type": "array"
+    },
+    "prompt_chars": {
+      "default": 0,
+      "title": "Prompt Chars",
+      "type": "integer"
+    },
+    "model": {
+      "default": "",
+      "title": "Model",
+      "type": "string"
+    },
+    "at": {
+      "title": "At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "step"
+  ],
+  "title": "ManifestEntry",
+  "type": "object"
+}

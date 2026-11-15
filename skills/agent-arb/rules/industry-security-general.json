@@ -1,0 +1,219 @@
+{
+ "name": "industry-security-general",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Security basics every design should state.",
+ "rules": [
+  {
+   "id": "IND-SEC-001",
+   "title": "A threat model names trust boundaries and the top threats",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "security"
+   ],
+   "requirement": "The design identifies trust boundaries, the assets worth protecting, and the threats considered for each boundary, with a mitigation or an accepted risk for each.",
+   "question": "",
+   "evidence_hints": [
+    "threat model",
+    "trust boundary",
+    "STRIDE",
+    "attacker",
+    "mitigation"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "public-domain",
+    "name": "NIST SP 800-53 Rev. 5",
+    "locator": "RA-3 Risk Assessment, SA-11 Developer Testing and Evaluation",
+    "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    "licence": "public domain (US government work)",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SEC-002",
+   "title": "Validate input at every trust boundary",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "security",
+    "api"
+   ],
+   "requirement": "Input crossing a trust boundary is validated against a schema or allowlist, and the design says what happens to rejected input. Injection into queries, commands and templates is addressed.",
+   "question": "",
+   "evidence_hints": [
+    "validate",
+    "schema",
+    "allowlist",
+    "injection",
+    "sanitize"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "public-domain",
+    "name": "NIST SP 800-53 Rev. 5",
+    "locator": "SI-10 Information Input Validation",
+    "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    "licence": "public domain (US government work)",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SEC-003",
+   "title": "Any feature that fetches a user-supplied URL is protected against server-side request forgery",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "security",
+    "api",
+    "network"
+   ],
+   "requirement": "Where the system fetches URLs supplied by users, destinations are restricted to an allowlist, internal address ranges and metadata endpoints are blocked, and redirects are not followed blindly.",
+   "question": "",
+   "evidence_hints": [
+    "SSRF",
+    "fetch",
+    "webhook",
+    "allowlist",
+    "metadata"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [
+     "api",
+     "integration",
+     "network"
+    ],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "reference",
+    "name": "OWASP Top 10 2021, A10 Server-Side Request Forgery",
+    "locator": "",
+    "url": "https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/",
+    "licence": "CC BY-SA 4.0, cited only",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SEC-004",
+   "title": "Supply chain controls on dependencies and images",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "security",
+    "delivery"
+   ],
+   "requirement": "Dependencies and container images are pinned, scanned, and built in a pipeline that produces provenance, and the design names the level of assurance aimed for.",
+   "question": "",
+   "evidence_hints": [
+    "SBOM",
+    "provenance",
+    "scan",
+    "pinned",
+    "SLSA",
+    "signed"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "public-domain",
+    "name": "NIST SP 800-204C",
+    "locator": "DevSecOps practices for microservices",
+    "url": "https://csrc.nist.gov/pubs/sp/800/204/c/final",
+    "licence": "public domain (US government work)",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SEC-005",
+   "title": "Security events are logged and reviewed",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "security",
+    "logging"
+   ],
+   "requirement": "Authentication failures, authorization denials, privilege changes and administrative actions are logged with who, what and when, retained for a stated period, and someone or something reviews them.",
+   "question": "",
+   "evidence_hints": [
+    "audit log",
+    "security event",
+    "denied",
+    "admin action",
+    "retain"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "public-domain",
+    "name": "NIST SP 800-53 Rev. 5",
+    "locator": "AU-2 Event Logging, AU-6 Audit Record Review",
+    "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    "licence": "public domain (US government work)",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "4c9e39849bb6a63b"
+}

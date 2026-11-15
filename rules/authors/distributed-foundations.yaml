@@ -1,0 +1,53 @@
+name: authors-distributed-foundations
+layer: base
+version: 0.1.0
+description: Principles from the foundational distributed systems literature, restated in Agent ARB's own words with a citation. No text reused; the authors have not reviewed or endorsed this pack.
+rules:
+  - id: AUT-DIST-001
+    title: The network is not reliable, fast, secure or homogeneous
+    severity: high
+    tags: [failure, network, resilience, integration]
+    requirement: The design does not assume the network is always available, has zero latency, infinite bandwidth, is secure, has a fixed topology, or has one administrator. Each remote call path says what happens when the network is partitioned or slow.
+    evidence_hints: [partition, network failure, latency, bandwidth]
+    source: {kind: author-principle, name: L. Peter Deutsch and colleagues at Sun Microsystems, locator: "The Fallacies of Distributed Computing", text_reused: none}
+  - id: AUT-DIST-002
+    title: Choose consistency or availability under partition, explicitly
+    severity: high
+    tags: [consistency, availability, replication, data]
+    requirement: For each replicated store the design states what it gives up during a partition, consistency or availability, and why that is acceptable for the data in question.
+    evidence_hints: [CAP, partition, consistent, available, eventual]
+    applies_when: {tags_any: [replication, consistency, data, multi-region, storage]}
+    source: {kind: author-principle, name: Eric Brewer, locator: "CAP Twelve Years Later: How the Rules Have Changed, IEEE Computer, 2012", text_reused: none}
+  - id: AUT-DIST-003
+    title: Cross-service writes avoid distributed transactions
+    severity: high
+    tags: [consistency, data, integration, messaging]
+    requirement: Where a business operation updates more than one service, the design uses local transactions plus asynchronous messaging, idempotent handlers and compensating actions rather than a two-phase commit across services, or justifies the exception.
+    evidence_hints: [saga, compensate, outbox, two-phase, distributed transaction, idempotent]
+    applies_when: {tags_any: [data, integration, messaging, consistency]}
+    source: {kind: author-principle, name: Pat Helland, locator: "Life beyond Distributed Transactions: an Apostate's Opinion, CIDR 2007", text_reused: none}
+  - id: AUT-DIST-004
+    title: Eventual consistency is named where it exists, with its user-visible effect
+    severity: medium
+    tags: [consistency, data, replication]
+    requirement: Any path where a reader can observe stale data is identified, the expected staleness window is stated, and the design says what the user sees and whether read-your-writes is needed.
+    evidence_hints: [eventual, stale, read-your-writes, staleness]
+    applies_when: {tags_any: [consistency, replication, data, caching]}
+    source: {kind: author-principle, name: Werner Vogels, locator: "Eventually Consistent, Communications of the ACM, 2009", text_reused: none}
+  - id: AUT-DIST-005
+    title: Latency budgets are built from known operation costs
+    severity: medium
+    scope: design
+    tags: [latency, performance]
+    requirement: The latency objective is decomposed across hops and storage operations using realistic per-operation costs, so the design shows the objective is achievable before it is built.
+    evidence_hints: [latency budget, round trip, disk, cache, hop]
+    applies_when: {tags_any: [latency, performance]}
+    source: {kind: author-principle, name: Jeff Dean, locator: "Numbers Everyone Should Know, Stanford CS295 lecture, 2010", text_reused: none}
+  - id: AUT-DIST-006
+    title: Logs and streams are the integration backbone, with ordering stated
+    severity: medium
+    tags: [messaging, ordering, data, integration]
+    requirement: Where events are used to move data between services, the design states the ordering guarantee, the partitioning key that provides it, the delivery guarantee, and how consumers handle duplicates.
+    evidence_hints: [ordering, partition key, at-least-once, exactly-once, duplicate, offset]
+    applies_when: {tags_any: [messaging, ordering, integration, data]}
+    source: {kind: author-principle, name: Martin Kleppmann, locator: "Designing Data-Intensive Applications, Chapter 11, Stream Processing", text_reused: none}

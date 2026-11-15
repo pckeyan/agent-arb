@@ -1,0 +1,177 @@
+{
+ "name": "industry-scalability",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Capacity, scaling and performance under load.",
+ "rules": [
+  {
+   "id": "IND-SCA-001",
+   "title": "State expected load and the headroom designed for",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "scalability",
+    "capacity",
+    "performance"
+   ],
+   "requirement": "The design states expected request rates, data volumes and growth, and the multiple of that load the system is sized to absorb before scaling action is needed.",
+   "question": "",
+   "evidence_hints": [
+    "requests per second",
+    "throughput",
+    "peak",
+    "growth",
+    "headroom"
+   ],
+   "expects": [
+    "load figure"
+   ],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Azure Well-Architected Framework",
+    "locator": "Performance efficiency",
+    "url": "https://learn.microsoft.com/azure/well-architected/performance-efficiency/capacity-planning",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SCA-002",
+   "title": "Identify the first bottleneck and the scaling unit",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "scalability",
+    "capacity"
+   ],
+   "requirement": "The design names which component saturates first, what the unit of scaling is for it, and whether scaling is automatic or manual.",
+   "question": "",
+   "evidence_hints": [
+    "bottleneck",
+    "scale out",
+    "autoscale",
+    "shard",
+    "partition"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Performance optimization",
+    "url": "https://docs.cloud.google.com/architecture/framework/performance-optimization",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SCA-003",
+   "title": "Keep request-serving components stateless or state-partitioned",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "scalability",
+    "storage",
+    "availability"
+   ],
+   "requirement": "Components that scale horizontally hold no session or request state locally, or the design explains how state is partitioned and rebalanced.",
+   "question": "",
+   "evidence_hints": [
+    "stateless",
+    "session",
+    "sticky",
+    "partition"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "mit",
+    "name": "The Twelve-Factor App",
+    "locator": "Factor VI",
+    "url": "https://12factor.net/processes",
+    "licence": "MIT",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-SCA-004",
+   "title": "Prove the latency objective at expected peak",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "performance",
+    "latency",
+    "testing",
+    "capacity"
+   ],
+   "requirement": "The design names a load test or capacity test that demonstrates the latency percentiles hold at the expected peak, not just at idle.",
+   "question": "",
+   "evidence_hints": [
+    "load test",
+    "capacity test",
+    "p99",
+    "peak"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": 2
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Azure Well-Architected Framework",
+    "locator": "Performance efficiency",
+    "url": "https://learn.microsoft.com/azure/well-architected/performance-efficiency/performance-test",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "ea9627adeb9abec7"
+}

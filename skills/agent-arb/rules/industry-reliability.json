@@ -1,0 +1,260 @@
+{
+ "name": "industry-reliability",
+ "layer": "base",
+ "version": "0.1.0",
+ "description": "Availability and failure design. Adapted in Agent ARB's own words from publicly licensed sources named on each rule.",
+ "rules": [
+  {
+   "id": "IND-REL-001",
+   "title": "State an availability objective with a measurement window",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "reliability",
+    "availability",
+    "slo"
+   ],
+   "requirement": "The design names an availability target for the service, expressed as a percentage over a stated window, and says how availability is measured.",
+   "question": "",
+   "evidence_hints": [
+    "availability",
+    "99.9",
+    "uptime",
+    "SLO",
+    "window"
+   ],
+   "expects": [
+    "percentage",
+    "window"
+   ],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability pillar",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-REL-002",
+   "title": "Name every single point of failure and its accepted risk",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "spof",
+    "availability",
+    "reliability"
+   ],
+   "requirement": "Each component that runs as a single instance, in a single zone, or behind a single network path is listed, with either a redundancy plan or an explicit statement that the risk is accepted and why.",
+   "question": "",
+   "evidence_hints": [
+    "single point",
+    "redundancy",
+    "replica",
+    "zone",
+    "standby"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Azure Well-Architected Framework",
+    "locator": "Reliability",
+    "url": "https://learn.microsoft.com/azure/well-architected/reliability/redundancy",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-REL-003",
+   "title": "Spread critical components across failure domains",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "high",
+   "tags": [
+    "availability",
+    "multi-region",
+    "reliability"
+   ],
+   "requirement": "Components that must stay up are deployed across more than one failure domain such as zones or regions, and the design states what happens when one domain is lost.",
+   "question": "",
+   "evidence_hints": [
+    "zone",
+    "region",
+    "failure domain",
+    "multi-AZ"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": 2
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-REL-004",
+   "title": "Define health checks that reflect real readiness",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "availability",
+    "reliability",
+    "deployment"
+   ],
+   "requirement": "Each service exposes a liveness and a readiness signal, readiness reflects the ability to serve rather than process existence, and the design says what the platform does when either fails.",
+   "question": "",
+   "evidence_hints": [
+    "health check",
+    "readiness",
+    "liveness",
+    "probe"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Kubernetes documentation",
+    "locator": "Configure liveness",
+    "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-REL-005",
+   "title": "Make deployments reversible",
+   "scope": "architecture",
+   "target": "decision",
+   "type": "check",
+   "severity": "medium",
+   "tags": [
+    "deployment",
+    "delivery",
+    "reliability"
+   ],
+   "requirement": "The rollout strategy is named, for example canary or blue-green, a rollback path exists that does not require a forward fix, and schema or data changes are compatible with the previous version during rollout.",
+   "question": "",
+   "evidence_hints": [
+    "rollback",
+    "canary",
+    "blue-green",
+    "backward compatible",
+    "migration"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "cc-by",
+    "name": "Google Cloud Architecture Framework",
+    "locator": "Reliability",
+    "url": "https://docs.cloud.google.com/architecture/framework/reliability",
+    "licence": "CC BY 4.0",
+    "text_reused": "adapted"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  },
+  {
+   "id": "IND-REL-006",
+   "title": "Separate configuration from code and from secrets",
+   "scope": "design",
+   "target": "decision",
+   "type": "check",
+   "severity": "low",
+   "tags": [
+    "deployment",
+    "delivery"
+   ],
+   "requirement": "Environment-specific configuration is supplied at deploy time rather than built into the artifact, and secrets are supplied through a secret store rather than configuration files.",
+   "question": "",
+   "evidence_hints": [
+    "config",
+    "environment variable",
+    "secret store",
+    "artifact"
+   ],
+   "expects": [],
+   "applies_when": {
+    "data_classes": [],
+    "tags_any": [],
+    "min_tier": null
+   },
+   "level": null,
+   "compliance_refs": [],
+   "source": {
+    "kind": "mit",
+    "name": "The Twelve-Factor App",
+    "locator": "Factor III",
+    "url": "https://12factor.net/config",
+    "licence": "MIT",
+    "text_reused": "none"
+   },
+   "status": "approved",
+   "overrides": null,
+   "reviewed_by": "",
+   "reviewed_on": ""
+  }
+ ],
+ "content_hash": "dc42e1ede41ab210"
+}

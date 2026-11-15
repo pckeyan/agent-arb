@@ -1,0 +1,131 @@
+# The canon: authors and works whose principles the author packs restate.
+# Principles only; no text is reused. The authors have not reviewed or endorsed Agent ARB.
+# Status: "in" means rules exist in a pack; "candidate" means listed for a later pass.
+authors:
+  - name: Leslie Lamport
+    works: ["Time, Clocks, and the Ordering of Events in a Distributed System (1978)", "The Part-Time Parliament (1998)"]
+    pack: distributed-foundations
+    status: candidate
+    principles: [ordering of events without a global clock, consensus requires a majority and a stable leader]
+  - name: Eric Brewer
+    works: ["CAP Twelve Years Later (2012)"]
+    pack: distributed-foundations
+    status: in
+  - name: L. Peter Deutsch
+    works: ["The Fallacies of Distributed Computing"]
+    pack: distributed-foundations
+    status: in
+  - name: Pat Helland
+    works: ["Life beyond Distributed Transactions (2007)", "Immutability Changes Everything (2015)"]
+    pack: distributed-foundations
+    status: in
+  - name: Werner Vogels
+    works: ["Eventually Consistent (2009)"]
+    pack: distributed-foundations
+    status: in
+  - name: Jeff Dean
+    works: ["Numbers Everyone Should Know", "The Tail at Scale (2013, with Luiz André Barroso)"]
+    pack: distributed-foundations, observability
+    status: in
+  - name: Martin Kleppmann
+    works: ["Designing Data-Intensive Applications (2017)"]
+    pack: distributed-foundations, recovery
+    status: in
+  - name: Gregor Hohpe
+    works: ["Enterprise Integration Patterns (2003, with Bobby Woolf)", "The Software Architect Elevator (2020)", "37 Things One Architect Knows (2016)"]
+    pack: integration, practice
+    status: in
+  - name: Chris Richardson
+    works: ["Microservices Patterns (2018)"]
+    pack: integration
+    status: in
+  - name: Michael Nygard
+    works: ["Release It! 2nd ed. (2018)", "Documenting Architecture Decisions (2011)"]
+    pack: resilience, stability-operations, evolution-delivery, practice
+    status: in
+  - name: Nicole Forsgren, Jez Humble, Gene Kim
+    works: ["Accelerate (2018)"]
+    pack: stability-operations
+    status: in
+  - name: Eric Evans
+    works: ["Domain-Driven Design (2003)"]
+    pack: structure-domain
+    status: in
+  - name: Martin Fowler
+    works: ["Patterns of Enterprise Application Architecture (2002)", "martinfowler.com bliki"]
+    pack: structure-domain, evolution-delivery
+    status: in
+  - name: Sam Newman
+    works: ["Building Microservices 2nd ed. (2021)", "Monolith to Microservices (2019)"]
+    pack: structure-domain
+    status: in
+  - name: Mark Richards, Neal Ford
+    works: ["Fundamentals of Software Architecture (2020)", "Software Architecture: The Hard Parts (2021)"]
+    pack: structure-domain, practice
+    status: in
+  - name: Simon Brown
+    works: ["The C4 model (c4model.com, CC BY 4.0)", "Software Architecture for Developers"]
+    pack: structure-domain
+    status: in
+  - name: Neal Ford, Rebecca Parsons, Patrick Kua
+    works: ["Building Evolutionary Architectures (2017)"]
+    pack: evolution-delivery
+    status: in
+  - name: Jez Humble, David Farley
+    works: ["Continuous Delivery (2010)"]
+    pack: evolution-delivery
+    status: in
+  - name: Mary and Tom Poppendieck
+    works: ["Lean Software Development (2003)"]
+    pack: evolution-delivery
+    status: in
+  - name: Joshua Bloch
+    works: ["Effective Java 3rd ed. (2018)", "How to Design a Good API and Why it Matters (2006)"]
+    pack: api-concurrency
+    status: in
+  - name: Brian Goetz
+    works: ["Java Concurrency in Practice (2006, with Peierls, Bloch, Bowbeer, Holmes, Lea)"]
+    pack: api-concurrency
+    status: in
+  - name: Doug Lea
+    works: ["Concurrent Programming in Java 2nd ed. (1999)", "Scalable IO in Java (2003)"]
+    pack: api-concurrency
+    status: in
+  - name: James Gosling
+    works: ["The Java Language Environment white paper (1996, with Henry McGilton)"]
+    pack: api-concurrency
+    status: in
+    note: Thin as a source of architectural rules; one advisory only.
+  - name: Andrew Harmel-Law
+    works: ["Facilitating Software Architecture (2024)"]
+    pack: practice
+    status: in
+  - name: Nathaniel Schutta
+    works: ["Thinking Architecturally (O'Reilly report)"]
+    pack: practice
+    status: in
+  - name: Len Bass, Paul Clements, Rick Kazman
+    works: ["Software Architecture in Practice 4th ed. (2021)", "Documenting Software Architectures 2nd ed. (2010)"]
+    pack: practice
+    status: in
+  - name: George Fairbanks
+    works: ["Just Enough Software Architecture (2010)"]
+    pack: practice
+    status: in
+  - name: Michael Keeling
+    works: ["Design It! (2017)"]
+    pack: practice
+    status: in
+  - name: John Ousterhout
+    works: ["A Philosophy of Software Design (2018)"]
+    pack: practice
+    status: in
+  - name: Murat Erder, Pierre Pureur, Eoin Woods
+    works: ["Continuous Architecture in Practice (2021)"]
+    pack: practice
+    status: candidate
+  - name: Betsy Beyer and the Google SRE authors
+    works: ["Site Reliability Engineering (2016)", "The Site Reliability Workbook (2018)"]
+    pack: observability, stability-operations
+    status: in
+    note: CC BY-NC-ND 4.0. Cited only; rules written independently.

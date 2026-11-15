@@ -1,0 +1,14 @@
+name: close pull requests
+on:
+  pull_request_target: {types: [opened]}
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    permissions: {pull-requests: write}
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({...context.repo, issue_number: context.payload.pull_request.number,
+              body: "Thank you for the interest. Agent ARB is shared for use and discussion and does not accept pull requests. Bug reports and questions are welcome in Discussions."});
+            await github.rest.pulls.update({...context.repo, pull_number: context.payload.pull_request.number, state: "closed"});
