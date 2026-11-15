@@ -81,10 +81,10 @@ def main() -> int:
         and avg["false_positive_rate"] <= thresholds["false_positive_rate_max"]
         and avg["boundary_compliance"] >= thresholds["boundary_compliance"]
     )
-    print("\nGATE", "PASS" if ok else "FAIL", f"(model {model.name})")
     if a.fake:
-        print("note: the scripted model passes every rule, so finding_recall is meaningless here; this run checks plumbing only")  # noqa: E501
-        return 0
+        print("\nGATE SKIPPED: the scripted model passes every rule, so this run checks plumbing only")
+        return 0 if avg["boundary_compliance"] >= thresholds["boundary_compliance"] else 1
+    print("\nGATE", "PASS" if ok else "FAIL", f"(model {model.name})")
     return 0 if ok else 1
 
 
