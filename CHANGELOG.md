@@ -11,3 +11,8 @@ All notable changes to this project are documented here. The format follows Keep
 - Seed compiler for PDF, Markdown and YAML, with a rule-by-rule approval command.
 - Eval corpus of three documents with expected findings, a scoring runner and a CI plumbing gate.
 - Spec exported as JSON schemas, docs site, decision records, attribution and notice files.
+- Evidence policy: decision proposals and findings must quote the text; near-miss quotes are snapped to the real sentence with number and length guards; failures without a quote are kept as unverified; passes without a quote are dropped.
+- Judging in batches of a few rules per prompt so small models answer every rule.
+
+### Known limits
+- Small local models (3B class) quote rules instead of the document and therefore produce almost no verified passes. Use 7B or larger.

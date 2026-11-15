@@ -26,6 +26,8 @@ agent-arb init              # writes ~/.config/agent-arb/config.toml and checks 
 
 Any OpenAI-compatible endpoint works by editing `[model]` in the config: vLLM, LM Studio, llama.cpp server.
 
+**Model size matters.** Agent ARB only reports findings it can ground in the document, so a model that cannot quote the text accurately produces few verified findings. In testing, a 3B model quoted the rules instead of the document on almost every pass verdict and those were all discarded, leaving only unverified failures. Use a 7B class model or larger for real reviews, and run `uv run python evals/run_evals.py` to see how your model scores before trusting it.
+
 The skill installs into Claude Code or Codex with the skills CLI, and needs only a Python 3 interpreter on the path. It does not need the CLI.
 
 ```bash
