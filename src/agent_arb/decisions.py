@@ -7,7 +7,7 @@ from importlib import resources
 from .llm import Model
 from .manifest import Manifest
 from .models import DATA_CLASSES, Decision, ManifestEntry, Option, Scope, Section
-from .verify import quote_in
+from .verify import resolve_quote
 
 TAG_VOCABULARY = [
     "reliability",
@@ -87,7 +87,8 @@ def propose_decisions(
     for raw in reply.get("decisions", []) or []:
         if not isinstance(raw, dict) or not raw.get("title"):
             continue
-        if not quote_in(str(raw.get("evidence_quote", "")), section.text):
+        evidence, _repaired = resolve_quote(str(raw.get("evidence_quote", "")), section.text)
+        if evidence is None:
             dropped += 1
             continue
         i = len(out)
@@ -114,7 +115,7 @@ def propose_decisions(
                 options=options,
                 chosen=str(raw.get("chosen", "")),
                 implications=str(raw.get("implications", "")),
-                evidence_quote=str(raw.get("evidence_quote", "")),
+                evidence_quote=evidence,
                 tags=tags,
                 data_classes=data_classes,
             )

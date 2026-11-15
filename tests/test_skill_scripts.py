@@ -49,6 +49,11 @@ def test_verify_quotes_script(tmp_path: Path) -> None:
                 "findings": [
                     {"rule_id": "A", "verdict": "fail", "quote": "runs in two availability zones"},
                     {"rule_id": "B", "verdict": "fail", "quote": "runs in three zones"},
+                    {
+                        "rule_id": "C",
+                        "verdict": "pass",
+                        "quote": "the cluster is in two availability zones using synchronous replication",
+                    },
                 ]
             }
         )
@@ -68,8 +73,9 @@ def test_verify_quotes_script(tmp_path: Path) -> None:
             text=True,
         ).stdout
     )
-    assert [f["rule_id"] for f in out["kept"]] == ["A"]
+    assert [f["rule_id"] for f in out["kept"]] == ["A", "C"]
     assert [f["rule_id"] for f in out["dropped"]] == ["B"]
+    assert out["kept"][1]["quote"].startswith("The cluster runs")
 
 
 def test_split_sections_script_matches_engine() -> None:
