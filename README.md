@@ -125,7 +125,7 @@ flowchart LR
   style judge fill:#e2f1f5,stroke:#0b6e8a
 ```
 
-Two model calls per decision at most: proposing it and judging it. Two human gates: confirming the decision list and walking through findings. The packet is the only thing that leaves the process, and it holds one decision's text plus the rules selected for it. Challenge mode asks the advisory questions before the judge runs.
+A finding whose quote is not in the text is dropped before anyone sees it; a near-miss quote is snapped to the real sentence it paraphrases; a failure that offers no quote is kept but marked unverified, since an absence cannot be quoted. Two model calls per decision at most: proposing it and judging it. Two human gates: confirming the decision list and walking through findings. The packet is the only thing that leaves the process, and it holds one decision's text plus the rules selected for it. Challenge mode asks the advisory questions before the judge runs.
 
 ### Who does each step
 

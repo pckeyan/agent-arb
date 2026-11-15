@@ -4,7 +4,8 @@
 A quote is accepted verbatim, or repaired to the single sentence it clearly paraphrases
 when at least 75 percent of its words occur in that sentence, it has at least five words,
 and every number in it appears in that sentence. Repaired findings carry
-the real sentence and a note. Anything else is dropped.
+the real sentence and a note. A quote matching nothing is dropped with its finding. A failure with no quote is kept but
+marked unverified; a pass with no quote is dropped.
 
 Usage: verify_quotes.py --findings findings.json --section-text section.txt
 Prints {"kept": [...], "dropped": [...]} and rewrites findings.json with the kept findings.
@@ -56,8 +57,16 @@ def main():
     kept, dropped = [], []
     for fnd in findings:
         q = norm(fnd.get("quote", ""))
-        if fnd.get("verdict") == "unclear" and not q:
-            fnd["verified"] = True
+        if not q:
+            if fnd.get("verdict") == "pass":
+                fnd["verified"] = False
+                dropped.append(fnd)
+                continue
+            fnd["verified"] = False
+            if fnd.get("verdict") == "fail":
+                fnd["explanation"] = (
+                    fnd.get("explanation", "") + " [no quote offered; the model reports the information is absent]"
+                ).strip()
             kept.append(fnd)
             continue
         if len(q) >= 8 and q in text:

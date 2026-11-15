@@ -1,9 +1,11 @@
-"""Keep only findings whose quote is really in the text.
+"""Keep only findings whose evidence is really in the text.
 
 A quote is accepted verbatim, or repaired to the single sentence of the text it
 clearly paraphrases when most of the quote's words occur in that sentence. A
-repaired finding carries the real sentence, never the model's wording. Anything
-else is dropped.
+repaired finding carries the real sentence, never the model's wording. A quote
+that matches nothing is dropped along with its finding. A failure that offers no
+quote at all is kept but marked unverified, because an absence cannot be quoted;
+a pass with no quote is dropped, because a pass must point at evidence.
 """
 
 from __future__ import annotations
@@ -62,8 +64,17 @@ def verify_findings(findings: list[Finding], text: str) -> tuple[list[Finding], 
     kept: list[Finding] = []
     dropped: list[Finding] = []
     for f in findings:
-        if f.verdict == "unclear" and not f.quote:
-            f.verified = True
+        if not f.quote.strip():
+            if f.verdict == "pass":
+                f.verified = False
+                dropped.append(f)  # a pass must point at evidence
+                continue
+            # Absence cannot be quoted. Keep the claim, but say it is unverified so the author checks it.
+            f.verified = False
+            if f.verdict == "fail":
+                f.explanation = (
+                    f.explanation + " [no quote offered; the model reports the information is absent]"
+                ).strip()
             kept.append(f)
             continue
         quote, repaired = resolve_quote(f.quote, text)

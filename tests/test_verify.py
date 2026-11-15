@@ -62,3 +62,12 @@ def test_short_quotes_must_be_verbatim() -> None:
     f = Finding(rule_id="A", decision_id="D1", verdict="fail", severity=Severity.HIGH, quote="runs in three zones")
     kept, dropped = verify_findings([f], TEXT)
     assert dropped and not kept
+
+
+def test_failure_without_quote_is_kept_unverified_and_pass_without_quote_is_dropped() -> None:
+    fail = Finding(rule_id="A", decision_id="D1", verdict="fail", severity=Severity.HIGH, explanation="nothing stated")
+    ok = Finding(rule_id="B", decision_id="D1", verdict="pass", severity=Severity.HIGH)
+    kept, dropped = verify_findings([fail, ok], TEXT)
+    assert [f.rule_id for f in kept] == ["A"] and not kept[0].verified
+    assert "no quote offered" in kept[0].explanation
+    assert [f.rule_id for f in dropped] == ["B"]

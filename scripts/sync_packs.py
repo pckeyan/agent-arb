@@ -31,4 +31,9 @@ for path in sorted(SRC.rglob("*.yaml")):
     count += len(pack.rules)
 tiers = yaml.safe_load((SRC / "tiers.yaml").read_text(encoding="utf-8"))
 (DST / "tiers.json").write_text(json.dumps(tiers, indent=1) + "\n", encoding="utf-8")
-print(f"synced {count} rules into {DST.relative_to(ROOT)}")
+REFS = ROOT / "skills" / "agent-arb" / "references"
+for name in ("decisions", "review", "document"):
+    (REFS / f"{name}-prompt.md").write_text(
+        (ROOT / "src" / "agent_arb" / "prompts" / f"{name}.md").read_text(encoding="utf-8"), encoding="utf-8"
+    )
+print(f"synced {count} rules and 3 prompts into the skill")

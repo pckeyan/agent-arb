@@ -11,7 +11,7 @@ Rules you follow throughout:
 
 - Read the document one section at a time. Never read the whole document into context at once, and never read a seed PDF; only compiled rule packs under `rules/` are read.
 - Judge only what the text says. Do not assume the system has properties the document does not state.
-- Every finding quotes the document verbatim. Run `scripts/verify_quotes.py` before writing the record; it drops any quote that is not in the section.
+- Every finding quotes the document verbatim, never a rule. Run `scripts/verify_quotes.py` before writing the record; it drops any quote that is not in the section, snaps near-miss quotes to the real sentence, and marks a failure with no quote as unverified.
 - The author has the last word on every finding. Record their disposition and rationale.
 - Keep messages short. One question at a time when asking the author something.
 

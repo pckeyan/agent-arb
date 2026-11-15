@@ -152,7 +152,8 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
                 note = f.explanation.replace("|", "/")
                 if f.rationale:
                     note += f" Author: {f.rationale.replace('|', '/')}"
-                lines.append(f"| {f.rule_id} {title} | {f.verdict} | {f.severity} | {f.disposition} | {note} |")
+                verdict = f.verdict if f.verified or f.verdict == "unclear" else f"{f.verdict} (unverified)"
+                lines.append(f"| {f.rule_id} {title} | {verdict} | {f.severity} | {f.disposition} | {note} |")
             lines.append("")
         advs = [a for a in record.advisories if a.decision_id == d.id]
         if advs:
@@ -170,8 +171,9 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
         lines.append("|---|---|---|---|---|")
         for f in sorted(docfs, key=lambda f: (f.verdict != "fail", SEVERITY_ORDER[f.severity], f.rule_id)):
             title = rules[f.rule_id].title if f.rule_id in rules else f.rule_id
+            verdict = f.verdict if f.verified or f.verdict == "unclear" else f"{f.verdict} (unverified)"
             lines.append(
-                f"| {f.rule_id} {title} | {f.verdict} | {f.severity} | {f.disposition} | {f.explanation.replace('|', '/')} |"  # noqa: E501
+                f"| {f.rule_id} {title} | {verdict} | {f.severity} | {f.disposition} | {f.explanation.replace('|', '/')} |"  # noqa: E501
             )
         lines.append("")
     docadv = [a for a in record.advisories if a.decision_id is None]
