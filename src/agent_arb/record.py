@@ -92,10 +92,6 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
     )
     lines.append("")
     lines.extend(render_alignment(record))
-    lines.append("---")
-    lines.append("")
-    lines.append("The sections below are the full review detail that supports the alignment above.")
-    lines.append("")
     if record.levels:
         lines.append("## Levels")
         lines.append("")
@@ -126,93 +122,7 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
             + ", ".join(f"{k} {v}" for k, v in sorted(by_sev.items(), key=lambda kv: SEVERITY_ORDER[kv[0]]))
         )
     lines.append("")
-    lines.append("## Decisions")
-    lines.append("")
-    for d in record.decisions:
-        lines.append(f"### {d.id}. {d.title}")
-        lines.append("")
-        lines.append(
-            f"Section {d.section_ref}. Scope {d.scope}. Tags: {', '.join(d.tags) or 'none'}."
-            + (f" Data classes: {', '.join(d.data_classes)}." if d.data_classes else "")
-        )
-        lines.append("")
-        if d.context:
-            lines.append(f"**Context.** {d.context}")
-            lines.append("")
-        if d.options:
-            lines.append("**Options considered.**")
-            lines.append("")
-            lines.extend(f"- {o.name}" + (f": {o.tradeoff}" if o.tradeoff else "") for o in d.options)
-            lines.append("")
-        if d.chosen:
-            lines.append(f"**Chosen.** {d.chosen}")
-            lines.append("")
-        if d.implications:
-            lines.append(f"**Implications.** {d.implications}")
-            lines.append("")
-        dfs = sorted(
-            (f for f in record.findings if f.decision_id == d.id and f.verdict != "n/a"),
-            key=lambda f: (f.verdict != "fail", SEVERITY_ORDER[f.severity], f.rule_id),
-        )
-        na_ids = sorted(f.rule_id for f in record.findings if f.decision_id == d.id and f.verdict == "n/a")
-        if dfs:
-            lines.append("| Rule | Verdict | Severity | Disposition | Note |")
-            lines.append("|---|---|---|---|---|")
-            for f in dfs:
-                title = rules[f.rule_id].title if f.rule_id in rules else f.rule_id
-                note = f.explanation.replace("|", "/")
-                if f.rationale:
-                    note += f" Author: {f.rationale.replace('|', '/')}"
-                verdict = f.verdict if f.verified or f.verdict == "unclear" else f"{f.verdict} (unverified)"
-                lines.append(f"| {f.rule_id} {title} | {verdict} | {f.severity} | {f.disposition} | {note} |")
-            lines.append("")
-        if na_ids:
-            lines.append(f"Not applicable to this decision ({len(na_ids)}): {', '.join(na_ids)}.")
-            lines.append("")
-        advs = [a for a in record.advisories if a.decision_id == d.id]
-        if advs:
-            lines.append("**Advisory questions.**")
-            lines.append("")
-            for a in advs:
-                lines.append(f"- {a.question}")
-                lines.append(f"  Answer: {a.answer or '(not answered)'}")
-            lines.append("")
-    docfs = [f for f in record.findings if f.decision_id is None and f.verdict != "n/a"]
-    if docfs:
-        lines.append("## Document-level findings")
-        lines.append("")
-        lines.append("| Rule | Verdict | Severity | Disposition | Note |")
-        lines.append("|---|---|---|---|---|")
-        for f in sorted(docfs, key=lambda f: (f.verdict != "fail", SEVERITY_ORDER[f.severity], f.rule_id)):
-            title = rules[f.rule_id].title if f.rule_id in rules else f.rule_id
-            verdict = f.verdict if f.verified or f.verdict == "unclear" else f"{f.verdict} (unverified)"
-            lines.append(
-                f"| {f.rule_id} {title} | {verdict} | {f.severity} | {f.disposition} | {f.explanation.replace('|', '/')} |"  # noqa: E501
-            )
-        lines.append("")
-    docadv = [a for a in record.advisories if a.decision_id is None]
-    if docadv:
-        lines.append("## Document-level advisory questions")
-        lines.append("")
-        for a in docadv:
-            lines.append(f"- {a.question}")
-            lines.append(f"  Answer: {a.answer or '(not answered)'}")
-        lines.append("")
-    if record.compliance:
-        lines.append("## Compliance traceability")
-        lines.append("")
-        lines.append("Design-time traceability only. Not an assessment.")
-        lines.append("")
-        lines.append("| Framework | Reference | Rule | Decision | Verdict | Disposition |")
-        lines.append("|---|---|---|---|---|---|")
-        for c in record.compliance:
-            lines.append(
-                f"| {c.framework} | {c.reference} | {c.rule_id} | {c.decision_id or 'document'} | {c.verdict} | {c.disposition} |"  # noqa: E501
-            )
-        lines.append("")
-    lines.append("## Rule packs used")
-    lines.append("")
-    for p in record.packs:
-        lines.append(f"- {p.name} ({p.layer}) version {p.version}, hash {p.content_hash}, {p.rule_count} rules")
+    stem = record.document.rsplit(".", 1)[0]
+    lines.append(f"Every finding, with its quote, verdict and disposition, is in `{stem}.record.json`.")
     lines.append("")
     return "\n".join(lines)

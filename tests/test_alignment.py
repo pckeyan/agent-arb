@@ -57,7 +57,8 @@ def test_alignment_page_renders_first_with_date_column_and_no_signature() -> Non
     record = Record(engine="agent-arb", engine_version="0", model="m", document="d.md", tier=1)
     sign(record, "Ada", "Head of Platform", "approved", date="2026-11-16")
     md = render_markdown(record, {})
-    assert md.index("## Alignment") < md.index("## Rule packs used")
+    assert md.index("## Alignment") < md.index("## Summary")
+    assert md.rstrip().endswith("record.json`.")
     assert "| Name | Role | Decision | Date |" in md
     assert "Signature" not in md
     assert "| Ada | Head of Platform | approved | 2026-11-16 |" in md

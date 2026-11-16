@@ -50,7 +50,7 @@ Run `python3 scripts/select_rules.py --document --tier <tier> [--company <folder
 
 Before writing, build the alignment page. Compute a short content hash of the document (`shasum -a 256`, first 16 hex characters) so the acceptance is tied to one revision. Derive the action items: every failed finding that was verified or that the author accepted, disputed or revised, and never a waived one. Ask the author for an owner per action, the conditions of acceptance, a one-line statement for approvers, the outcome they are requesting, and the approvers as name and role. Each approver starts as a pending row with an empty date.
 
-Write `.agent-arb/<doc>.record.md` and `.agent-arb/<doc>.record.json` following `references/record-format.md`, alignment page first. Include: levels observed versus target for observability, alerting and resilience, service levels stated in the document, every decision with its findings and dispositions, document-level findings, advisory answers, the compliance traceability table, and the pack versions used. State that this is a design-time review and not an attestation.
+Write `.agent-arb/<doc>.record.json` with everything: every decision with its findings and dispositions, document-level findings, advisory answers, the compliance traceability rows, and the pack versions used. Then write `.agent-arb/<doc>.record.md` following `references/record-format.md`: the alignment page, then levels observed versus target for observability, alerting and resilience, service levels stated in the document, and the summary. The Markdown stops after the summary. State that this is a design-time review and not an attestation.
 
 Tell the author where the record is and the three findings that matter most.
 

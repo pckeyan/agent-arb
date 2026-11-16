@@ -21,6 +21,7 @@ All notable changes to this project are documented here. The format follows Keep
 - Alignment page at the top of every record: document content hash and version, outcome, statement, conditions, agreed decisions, action items with owners, disposition summary, and an approvals table with name, role, decision and date. Acceptance is digital, by date; there is no signature column. `agent-arb review --approver "Name, Role"` adds pending approvers, the interactive flow ends by asking for owners, conditions and approvers, and `agent-arb sign` records a decision, re-renders the record and derives the outcome.
 
 ### Changed
+- The Markdown record is the alignment document only: alignment page, levels, service levels, summary. Per-decision findings, document-level findings, advisory answers, compliance traceability and packs used are in the JSON record.
 - Evidence policy: a failure whose quote is not in the text is now kept as unverified with the quote removed, instead of being dropped. A pass with an ungrounded quote is still dropped.
 
 ### Known limits

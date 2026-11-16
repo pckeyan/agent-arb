@@ -19,7 +19,8 @@ def test_end_to_end_with_fake_model(example_doc: Path, fake_model: FakeModel, tm
     assert any(c.framework == "PCI-DSS-v4.0.1" for c in record.compliance)
     assert any("p99" in s for s in record.service_levels)
     md = (tmp_path / "orders-service-design.record.md").read_text()
-    assert "Compliance traceability" in md and "not an assessment" in md
+    assert "## Alignment" in md and "not an assessment" in md
+    assert "## Decisions" not in md, "the Markdown stops after the summary; detail lives in the JSON"
     js = json.loads((tmp_path / "orders-service-design.record.json").read_text())
     assert js["engine"] == "agent-arb"
     manifest = (tmp_path / "orders-service-design.manifest.jsonl").read_text().splitlines()

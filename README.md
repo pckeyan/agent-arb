@@ -53,7 +53,7 @@ agent-arb rules approve acme.yaml --reviewer "your name"
 agent-arb rules list --seeds acme.yaml            # shows which base rules your pack overrides
 ```
 
-The record lands in `.agent-arb/` next to the document as Markdown and JSON, with a manifest listing exactly what every prompt contained.
+The record lands in `.agent-arb/` next to the document: the JSON holds every finding, the compliance rows and the packs used; the Markdown is the alignment document, which stops after the summary; and a manifest lists exactly what every prompt contained.
 
 ### Sign-off
 
@@ -152,7 +152,7 @@ The judge may also answer that a rule is not applicable to a decision, which is 
 | Judge | Local model, temperature 0 | Host model, one packet per prompt |
 | Verify quotes | Verbatim check, ungrounded passes dropped | `scripts/verify_quotes.py` |
 | Walk-through | Terminal prompt per finding | Conversation per finding |
-| Record | Markdown and JSON to the spec, alignment page first | `Write` Markdown and JSON to the same spec |
+| Record | JSON with every finding; Markdown alignment document | `Write` the same two files |
 | Sign | `agent-arb sign` enters the date against a name | Host edits the approvals table, date only |
 | Compile seeds | Full pipeline, PDF included | Markdown and YAML; PDF seeds are compiled with the CLI once and the pack shared |
 
