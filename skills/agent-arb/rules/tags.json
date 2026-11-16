@@ -1,0 +1,51 @@
+{
+ "families": {
+  "observability": [
+   "metrics",
+   "logging",
+   "tracing",
+   "alerting",
+   "slo"
+  ],
+  "resilience": [
+   "timeout",
+   "retry",
+   "backpressure",
+   "failure",
+   "spof"
+  ],
+  "reliability": [
+   "availability",
+   "spof",
+   "multi-region"
+  ],
+  "security": [
+   "auth",
+   "authz",
+   "identity",
+   "tls",
+   "secrets",
+   "pci",
+   "cardholder-data",
+   "encryption",
+   "key-management"
+  ],
+  "recovery": [
+   "backup",
+   "durability",
+   "replication"
+  ],
+  "data": [
+   "storage",
+   "backup",
+   "replication",
+   "durability",
+   "consistency",
+   "caching"
+  ],
+  "integration": [
+   "messaging",
+   "api"
+  ]
+ }
+}

@@ -8,7 +8,7 @@ Company standards must be applied repeatably. A language model is not determinis
 
 ## Decision
 
-Seeds are compiled once into versioned, human-approved rules. At review time, rule selection is a local tag and scope match, the model only classifies compliance and quotes evidence, and any finding whose quote is not verbatim in the text is dropped before anyone sees it.
+Seeds are compiled once into versioned, human-approved rules. At review time, rule selection is a local tag and scope match, the model only classifies compliance and quotes evidence, and any pass whose quote is not verbatim in the text is dropped before anyone sees it, while a failure with an ungrounded quote is shown as unverified.
 
 ## Consequences
 

@@ -25,7 +25,7 @@ def load_packs(folder, layer=None):
     if not folder or not os.path.isdir(folder):
         return packs
     for name in sorted(os.listdir(folder)):
-        if name.endswith(".json") and name != "tiers.json":
+        if name.endswith(".json") and name not in ("tiers.json", "tags.json"):
             with open(os.path.join(folder, name), encoding="utf-8") as f:
                 pack = json.load(f)
             if layer:
@@ -53,6 +53,19 @@ def apply_precedence(packs):
     return rules, shadowed
 
 
+def expand_tags(tags):
+    """The decision's tags plus every family they belong to (families come from ../rules/tags.json)."""
+    out = set(tags)
+    path = os.path.join(BUILTIN, "tags.json")
+    if os.path.isfile(path):
+        with open(path, encoding="utf-8") as f:
+            families = json.load(f).get("families", {})
+        for family, members in families.items():
+            if out & set(members):
+                out.add(family)
+    return out
+
+
 def tier_ok(rule, tier):
     mt = (rule.get("applies_when") or {}).get("min_tier")
     return mt is None or tier <= mt
@@ -60,7 +73,7 @@ def tier_ok(rule, tier):
 
 def select(rules, decision, tier):
     out = []
-    dtags = set(decision.get("tags", []))
+    dtags = expand_tags(decision.get("tags", []))
     dclasses = set(decision.get("data_classes", []))
     for r in rules.values():
         if r.get("target", "decision") != "decision":

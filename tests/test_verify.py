@@ -10,14 +10,17 @@ def test_quote_matching_is_whitespace_and_case_insensitive() -> None:
     assert not quote_in("short", TEXT)
 
 
-def test_unverifiable_findings_are_dropped() -> None:
+def test_ungrounded_pass_is_dropped_and_ungrounded_fail_is_kept_unverified() -> None:
     good = Finding(rule_id="A", decision_id="D1", verdict="fail", severity=Severity.HIGH, quote="runs in two zones")
-    bad = Finding(rule_id="B", decision_id="D1", verdict="fail", severity=Severity.HIGH, quote="runs in three zones")
-    unclear = Finding(rule_id="C", decision_id="D1", verdict="unclear", severity=Severity.LOW)
-    kept, dropped = verify_findings([good, bad, unclear], TEXT)
-    assert [f.rule_id for f in kept] == ["A", "C"]
+    wrong = "runs in three zones"
+    bad_pass = Finding(rule_id="B", decision_id="D1", verdict="pass", severity=Severity.HIGH, quote=wrong)
+    bad_fail = Finding(rule_id="C", decision_id="D1", verdict="fail", severity=Severity.HIGH, quote=wrong)
+    unclear = Finding(rule_id="D", decision_id="D1", verdict="unclear", severity=Severity.LOW)
+    kept, dropped = verify_findings([good, bad_pass, bad_fail, unclear], TEXT)
+    assert [f.rule_id for f in kept] == ["A", "C", "D"]
     assert [f.rule_id for f in dropped] == ["B"]
-    assert good.verified and not bad.verified
+    assert good.verified and not bad_pass.verified and not bad_fail.verified
+    assert bad_fail.quote == "" and "not in the text" in bad_fail.explanation
 
 
 def test_paraphrased_quote_is_repaired_to_the_real_sentence() -> None:
@@ -58,8 +61,14 @@ def test_contradicting_number_blocks_repair() -> None:
     assert dropped and not kept
 
 
+def test_not_applicable_is_kept_without_a_quote() -> None:
+    na = Finding(rule_id="A", decision_id="D1", verdict="n/a", severity=Severity.HIGH, quote="runs in three zones")
+    kept, dropped = verify_findings([na], TEXT)
+    assert kept == [na] and not dropped and na.quote == "" and not na.verified
+
+
 def test_short_quotes_must_be_verbatim() -> None:
-    f = Finding(rule_id="A", decision_id="D1", verdict="fail", severity=Severity.HIGH, quote="runs in three zones")
+    f = Finding(rule_id="A", decision_id="D1", verdict="pass", severity=Severity.HIGH, quote="runs in three zones")
     kept, dropped = verify_findings([f], TEXT)
     assert dropped and not kept
 

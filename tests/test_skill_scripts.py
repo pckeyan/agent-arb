@@ -23,7 +23,7 @@ def test_select_rules_script_matches_engine(tmp_path: Path) -> None:
         title="t",
         section_ref="S1",
         scope=Scope.ARCHITECTURE,
-        tags=["auth", "tls", "messaging"],
+        tags=["auth", "metrics", "backup"],
         data_classes=["cardholder-data"],
     )
     dj = tmp_path / "d.json"
@@ -48,7 +48,8 @@ def test_verify_quotes_script(tmp_path: Path) -> None:
             {
                 "findings": [
                     {"rule_id": "A", "verdict": "fail", "quote": "runs in two availability zones"},
-                    {"rule_id": "B", "verdict": "fail", "quote": "runs in three zones"},
+                    {"rule_id": "B", "verdict": "pass", "quote": "runs in three zones"},
+                    {"rule_id": "B2", "verdict": "fail", "quote": "runs in three zones"},
                     {
                         "rule_id": "C",
                         "verdict": "pass",
@@ -73,9 +74,10 @@ def test_verify_quotes_script(tmp_path: Path) -> None:
             text=True,
         ).stdout
     )
-    assert [f["rule_id"] for f in out["kept"]] == ["A", "C"]
+    assert [f["rule_id"] for f in out["kept"]] == ["A", "B2", "C"]
     assert [f["rule_id"] for f in out["dropped"]] == ["B"]
-    assert out["kept"][1]["quote"].startswith("The cluster runs")
+    assert out["kept"][1]["quote"] == "" and not out["kept"][1]["verified"]
+    assert out["kept"][2]["quote"].startswith("The cluster runs")
 
 
 def test_split_sections_script_matches_engine() -> None:

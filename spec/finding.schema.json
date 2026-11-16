@@ -32,7 +32,8 @@
       "enum": [
         "pass",
         "fail",
-        "unclear"
+        "unclear",
+        "n/a"
       ],
       "title": "Verdict",
       "type": "string"

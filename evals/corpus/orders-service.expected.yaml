@@ -1,7 +1,7 @@
 tier: 1
 decisions_expected:
-  - [dedicated, database]
+  - [dedicated, [postgresql, database]]
   - [mutual tls]
-  - [slo, p99]
+  - [[slo, p99, error budget]]
 must_fail: []
 must_pass: [IND-REC-001, IND-RES-001, IND-RES-002, IND-OBS-003, IND-OBS-007, IND-SEC-S2S-001, IND-SEC-S2S-009]

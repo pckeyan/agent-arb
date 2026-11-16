@@ -14,7 +14,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from agent_arb.models import Pack  # noqa: E402
-from agent_arb.rules import load_pack  # noqa: E402
+from agent_arb.rules import TAG_FAMILIES, load_pack  # noqa: E402
 
 SRC = ROOT / "rules"
 DST = ROOT / "skills" / "agent-arb" / "rules"
@@ -31,6 +31,7 @@ for path in sorted(SRC.rglob("*.yaml")):
     count += len(pack.rules)
 tiers = yaml.safe_load((SRC / "tiers.yaml").read_text(encoding="utf-8"))
 (DST / "tiers.json").write_text(json.dumps(tiers, indent=1) + "\n", encoding="utf-8")
+(DST / "tags.json").write_text(json.dumps({"families": TAG_FAMILIES}, indent=1) + "\n", encoding="utf-8")
 REFS = ROOT / "skills" / "agent-arb" / "references"
 for name in ("decisions", "review", "document"):
     (REFS / f"{name}-prompt.md").write_text(

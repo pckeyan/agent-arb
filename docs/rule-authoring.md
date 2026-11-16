@@ -8,7 +8,7 @@ A rule is a YAML object in a pack file. The schema is `spec/rule.schema.json`.
 | `scope` | `architecture`, `design`, `implementation` or `practice`. A rule fires only on decisions of the same scope; practice rules fire on every decision |
 | `target` | `decision` runs once per decision; `document` runs once against the outline |
 | `type` | `check` yields a pass or fail with a verbatim quote; `advisory` yields a question the author answers |
-| `tags` | At least one tag from the vocabulary in `src/agent_arb/decisions.py` must match the decision's tags, unless scope is practice |
+| `tags` | At least one tag from the vocabulary in `src/agent_arb/decisions.py` must match the decision's tags or their families (`TAG_FAMILIES` in `src/agent_arb/rules.py`: a `metrics` decision also matches `observability` rules), unless scope is practice |
 | `applies_when` | Extra conditions: `data_classes`, `tags_any`, `min_tier` (the rule applies to tiers at or above this criticality, where 1 is highest) |
 | `level` | Maturity level 1 to 4 for observability, alerting and resilience rules |
 | `expects` | Shapes the evidence must contain, for example `percentile`, `window` |

@@ -117,7 +117,7 @@ flowchart LR
   decision --> select[Select rules<br/>by tag, scope, target]
   select --> packet[Packet<br/>decision text + matched rules]
   packet --> judge[[Judge<br/>host or local model<br/>quotes its evidence]]
-  judge --> verify[Verify quotes<br/>not verbatim: dropped]
+  judge --> verify[Verify quotes<br/>ungrounded pass: dropped<br/>ungrounded fail: unverified]
   verify --> walk{{Walk-through<br/>accept · dispute · revise}}
   walk --> rec[Record<br/>disposition + rationale]
   packs[(Approved packs)] --> select
@@ -127,7 +127,7 @@ flowchart LR
   style judge fill:#e2f1f5,stroke:#0b6e8a
 ```
 
-A finding whose quote is not in the text is dropped before anyone sees it; a near-miss quote is snapped to the real sentence it paraphrases; a failure that offers no quote is kept but marked unverified, since an absence cannot be quoted. Two model calls per decision at most: proposing it and judging it. Two human gates: confirming the decision list and walking through findings. The packet is the only thing that leaves the process, and it holds one decision's text plus the rules selected for it. Challenge mode asks the advisory questions before the judge runs.
+The judge may also answer that a rule is not applicable to a decision, which is recorded as a count rather than a finding, so a storage choice is not failed for saying nothing about retries. A pass whose quote is not in the text is dropped before anyone sees it; a near-miss quote is snapped to the real sentence it paraphrases; a failure whose quote is not in the text, or that offers none, is kept but marked unverified, since a wrong citation does not make the concern wrong and an absence cannot be quoted. Two model calls per decision at most: proposing it and judging it. Two human gates: confirming the decision list and walking through findings. The packet is the only thing that leaves the process, and it holds one decision's text plus the rules selected for it. Challenge mode asks the advisory questions before the judge runs.
 
 ### Who does each step
 
@@ -136,9 +136,9 @@ A finding whose quote is not in the text is dropped before anyone sees it; a nea
 | Ingest | Split by headings; PDF and Word converted locally | `Grep` for headings, `Read` by line range |
 | Decisions | Local model, one section per prompt | Host model, one section per prompt |
 | Confirm | Terminal prompt | Conversation with the host agent |
-| Select rules | Tag, scope, target match in Python | `scripts/select_rules.py`, standard library only |
+| Select rules | Tag family, scope, target match in Python | `scripts/select_rules.py`, standard library only |
 | Judge | Local model, temperature 0 | Host model, one packet per prompt |
-| Verify quotes | Verbatim check, failures dropped | `scripts/verify_quotes.py` |
+| Verify quotes | Verbatim check, ungrounded passes dropped | `scripts/verify_quotes.py` |
 | Walk-through | Terminal prompt per finding | Conversation per finding |
 | Record | Markdown and JSON to the spec | `Write` Markdown and JSON to the same spec |
 | Compile seeds | Full pipeline, PDF included | Markdown and YAML; PDF seeds are compiled with the CLI once and the pack shared |

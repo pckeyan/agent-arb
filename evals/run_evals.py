@@ -3,9 +3,11 @@
 Usage:
   uv run python evals/run_evals.py            # real model from config
   uv run python evals/run_evals.py --fake     # scripted model, checks plumbing only
+  uv run python evals/run_evals.py --out .agent-arb/evals --only ledger-weak   # keep records, one document
 
 Metrics per document, then averaged:
-- decision_recall: expected decisions found (keyword match on title or evidence)
+- decision_recall: expected decisions found. Each entry is a list of keywords that must all appear in the
+  decision's title, evidence or chosen option; a nested list means any one of those words satisfies that slot.
 - finding_recall: must_fail rules that produced a fail finding
 - false_positive_rate: must_pass rules that produced a fail finding
 - boundary_compliance: every judge prompt carried at most one section
@@ -31,10 +33,19 @@ from agent_arb.llm import FakeModel, OpenAICompatibleModel  # noqa: E402
 from agent_arb.rules import load_builtin_packs  # noqa: E402
 
 
+def _matches(keywords: list, text: str) -> bool:
+    """Every slot must match; a slot that is itself a list matches when any of its words appears."""
+    for slot in keywords:
+        options = slot if isinstance(slot, list) else [slot]
+        if not any(str(o).lower() in text for o in options):
+            return False
+    return True
+
+
 def score(doc: Path, expected: dict, model, out: Path) -> dict[str, float]:
     record = run_review(doc, load_builtin_packs(), model, out, int(expected.get("tier", 2)), False, False)
     haystack = [f"{d.title} {d.evidence_quote} {d.chosen}".lower() for d in record.decisions]
-    hits = sum(1 for kws in expected.get("decisions_expected", []) if any(all(k.lower() in h for k in kws) for h in haystack))  # noqa: E501
+    hits = sum(1 for kws in expected.get("decisions_expected", []) if any(_matches(kws, h) for h in haystack))
     dec_total = len(expected.get("decisions_expected", [])) or 1
     failed = {f.rule_id for f in record.findings if f.verdict == "fail"}
     must_fail = set(expected.get("must_fail", []))
@@ -55,6 +66,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fake", action="store_true")
     ap.add_argument("--corpus", default=str(ROOT / "evals" / "corpus"))
+    ap.add_argument("--out", default=None, help="keep records and manifests under this directory")
+    ap.add_argument("--only", action="append", default=[], help="document stem(s) to run; default all")
     a = ap.parse_args()
     if a.fake:
         from conftest import scripted_responder
@@ -66,9 +79,12 @@ def main() -> int:
     thresholds = yaml.safe_load((ROOT / "evals" / "thresholds.yaml").read_text())
     results: dict[str, dict[str, float]] = {}
     with tempfile.TemporaryDirectory() as tmp:
+        out_root = Path(a.out) if a.out else Path(tmp)
         for doc in sorted(Path(a.corpus).glob("*.md")):
+            if a.only and doc.stem not in a.only:
+                continue
             expected = yaml.safe_load(doc.with_suffix(".expected.yaml").read_text())
-            results[doc.stem] = score(doc, expected, model, Path(tmp) / doc.stem)
+            results[doc.stem] = score(doc, expected, model, out_root / doc.stem)
     metrics = ["decision_recall", "finding_recall", "false_positive_rate", "boundary_compliance"]
     avg = {m: sum(r[m] for r in results.values()) / len(results) for m in metrics}
     print(f"\n{'document':<26}" + "".join(f"{m:>22}" for m in metrics) + f"{'decisions':>11}{'findings':>10}")

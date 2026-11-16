@@ -14,14 +14,14 @@ rules:
   - id: IND-REC-002
     title: Test restores, not just backups
     severity: high
-    tags: [recovery, backup, testing]
+    tags: [recovery, backup, testing, data]
     requirement: The design says how often a restore is exercised end to end, who performs it, and how the result is verified against the stated objectives.
     evidence_hints: [restore test, exercise, verify, drill]
     source: {kind: public-domain, name: "NIST SP 800-34 Rev. 1", locator: "Section 3.5, Plan Testing, Training and Exercises", url: https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final, licence: public domain (US government work)}
   - id: IND-REC-003
     title: Keep backups isolated from the thing they protect
     severity: high
-    tags: [backup, recovery, security]
+    tags: [backup, recovery, security, data]
     requirement: Backups are stored in a separate account, region or system with separate credentials, so that a failure or compromise of the primary cannot destroy them, and they are encrypted.
     evidence_hints: [backup, separate account, immutable, cross-region, encrypted]
     source: {kind: public-domain, name: "NIST SP 800-53 Rev. 5", locator: "CP-9 System Backup, CP-6 Alternate Storage Site", url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final, licence: public domain (US government work)}

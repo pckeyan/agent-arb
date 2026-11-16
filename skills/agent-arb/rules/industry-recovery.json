@@ -59,7 +59,8 @@
    "tags": [
     "recovery",
     "backup",
-    "testing"
+    "testing",
+    "data"
    ],
    "requirement": "The design says how often a restore is exercised end to end, who performs it, and how the result is verified against the stated objectives.",
    "question": "",
@@ -100,7 +101,8 @@
    "tags": [
     "backup",
     "recovery",
-    "security"
+    "security",
+    "data"
    ],
    "requirement": "Backups are stored in a separate account, region or system with separate credentials, so that a failure or compromise of the primary cannot destroy them, and they are encrypted.",
    "question": "",
@@ -216,5 +218,5 @@
    "reviewed_on": ""
   }
  ],
- "content_hash": "871bfb83e7a9f200"
+ "content_hash": "c4e2e783cd52d37a"
 }

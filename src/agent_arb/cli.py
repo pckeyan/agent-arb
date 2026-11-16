@@ -248,7 +248,7 @@ def _confirm_decisions(decisions: list[Decision]) -> list[Decision]:
 
 
 def _walk_through(decision: Decision | None, findings: list[Finding], rules: dict[str, Rule]) -> None:
-    fails = [f for f in findings if f.verdict != "pass"]
+    fails = [f for f in findings if f.verdict in {"fail", "unclear"}]
     if not fails:
         return
     head = f"{decision.id} {decision.title}" if decision else "Document-level"

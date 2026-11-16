@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from agent_arb.models import Decision, Layer, Pack, Rule, Scope, Source, Status
-from agent_arb.rules import RuleSet, load_builtin_packs, load_pack
+from agent_arb.rules import RuleSet, expand_tags, load_builtin_packs, load_pack
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -68,6 +68,15 @@ def test_select_by_scope_tags_and_data_class() -> None:
     ids2 = {r.id for r in rs.select(d2, tier=3)}
     assert "IND-SEC-PCI-003" not in ids2
     assert "IND-COST-001" in ids2
+
+
+def test_tag_families_widen_selection() -> None:
+    assert {"metrics", "observability"} <= expand_tags(["metrics"])
+    assert {"backup", "recovery", "data"} <= expand_tags(["backup"])
+    assert "security" not in expand_tags(["metrics"])
+    pack = Pack(name="t", layer=Layer.BASE, rules=[_rule("OBS", ["observability", "latency"])])
+    d = Decision(id="D1", title="t", section_ref="S1", scope=Scope.ARCHITECTURE, tags=["alerting"])
+    assert [r.id for r in RuleSet([pack]).select(d, tier=2)] == ["OBS"]
 
 
 def test_tier_gating() -> None:

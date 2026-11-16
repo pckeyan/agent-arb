@@ -1,7 +1,7 @@
 tier: 1
 decisions_expected:
-  - [shared, database]
-  - [internal network]
-  - [average, response]
+  - [shared, [database, mysql]]
+  - [[internal network, no authentication, trusted]]
+  - [[average, cpu]]
 must_fail: [IND-SEC-S2S-001, IND-RES-001, IND-SEC-PCI-002, IND-OBS-003, IND-OBS-008, AUT-STR-002, IND-REC-003]
 must_pass: []

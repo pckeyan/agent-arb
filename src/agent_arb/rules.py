@@ -13,6 +13,37 @@ from .models import Decision, Layer, Pack, Rule, Status, Target
 
 LAYER_ORDER = {Layer.BASE: 0, Layer.COMPANY: 1, Layer.PROJECT: 2}
 
+# A decision tagged with a specific concern also matches rules tagged with its family.
+# A "metrics" decision is an observability decision; a "backup" decision is a recovery and a data decision.
+TAG_FAMILIES: dict[str, list[str]] = {
+    "observability": ["metrics", "logging", "tracing", "alerting", "slo"],
+    "resilience": ["timeout", "retry", "backpressure", "failure", "spof"],
+    "reliability": ["availability", "spof", "multi-region"],
+    "security": [
+        "auth",
+        "authz",
+        "identity",
+        "tls",
+        "secrets",
+        "pci",
+        "cardholder-data",
+        "encryption",
+        "key-management",
+    ],
+    "recovery": ["backup", "durability", "replication"],
+    "data": ["storage", "backup", "replication", "durability", "consistency", "caching"],
+    "integration": ["messaging", "api"],
+}
+
+
+def expand_tags(tags: Iterable[str]) -> set[str]:
+    """The decision's tags plus every family they belong to."""
+    out = set(tags)
+    for family, members in TAG_FAMILIES.items():
+        if out & set(members):
+            out.add(family)
+    return out
+
 
 def load_pack(path: Path) -> Pack:
     raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -71,7 +102,7 @@ class RuleSet:
     def select(self, decision: Decision, tier: int) -> list[Rule]:
         """Rules whose scope, tags and conditions match one decision."""
         out: list[Rule] = []
-        dtags = set(decision.tags)
+        dtags = expand_tags(decision.tags)
         for rule in self.rules.values():
             if rule.target != Target.DECISION:
                 continue
@@ -80,7 +111,7 @@ class RuleSet:
             class_match = bool(set(rule.applies_when.data_classes) & set(decision.data_classes))
             if rule.tags and rule.scope != "practice" and not class_match and not (dtags & set(rule.tags)):
                 continue
-            if not self._applies(rule, decision, tier):
+            if not self._applies(rule, dtags, decision, tier):
                 continue
             out.append(rule)
         return sorted(out, key=lambda r: r.id)
@@ -95,11 +126,11 @@ class RuleSet:
     def _tier_ok(rule: Rule, tier: int) -> bool:
         return rule.applies_when.min_tier is None or tier <= rule.applies_when.min_tier
 
-    def _applies(self, rule: Rule, decision: Decision, tier: int) -> bool:
+    def _applies(self, rule: Rule, dtags: set[str], decision: Decision, tier: int) -> bool:
         cond = rule.applies_when
         if cond.data_classes and not (set(cond.data_classes) & set(decision.data_classes)):
             return False
-        if cond.tags_any and not (set(cond.tags_any) & set(decision.tags)):
+        if cond.tags_any and not (set(cond.tags_any) & dtags):
             return False
         return self._tier_ok(rule, tier)
 

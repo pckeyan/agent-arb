@@ -21,14 +21,14 @@ def level_summary(area: str, rules: dict[str, Rule], findings: list[Finding], ta
     observed = 0
     missing: list[str] = []
     for lvl in sorted(by_level):
-        fails = [f for f in by_level[lvl] if f.verdict != "pass"]
+        fails = [f for f in by_level[lvl] if f.verdict in {"fail", "unclear"}]
         if fails or lvl != observed + 1:
             missing.extend(sorted({f.rule_id for f in fails}))
             break
         observed = lvl
     for lvl, fs in by_level.items():
         if lvl > observed:
-            missing.extend(sorted({f.rule_id for f in fs if f.verdict != "pass"}))
+            missing.extend(sorted({f.rule_id for f in fs if f.verdict in {"fail", "unclear"}}))
     return LevelSummary(area=area, observed=observed, target=target, missing_rule_ids=sorted(set(missing)))
 
 
@@ -106,7 +106,11 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
     lines.append("## Summary")
     lines.append("")
     lines.append(f"- Decisions reviewed: {len(record.decisions)}")
-    lines.append(f"- Findings: {len(record.findings)}, of which {len(fails)} failed")
+    na_count = sum(1 for f in record.findings if f.verdict == "n/a")
+    lines.append(
+        f"- Findings: {len(record.findings)}, of which {len(fails)} failed"
+        + (f" and {na_count} judged not applicable to their decision" if na_count else "")
+    )
     by_sev: dict[str, int] = {}
     for f in fails:
         by_sev[f.severity] = by_sev.get(f.severity, 0) + 1
@@ -141,9 +145,10 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
             lines.append(f"**Implications.** {d.implications}")
             lines.append("")
         dfs = sorted(
-            (f for f in record.findings if f.decision_id == d.id),
+            (f for f in record.findings if f.decision_id == d.id and f.verdict != "n/a"),
             key=lambda f: (f.verdict != "fail", SEVERITY_ORDER[f.severity], f.rule_id),
         )
+        na_ids = sorted(f.rule_id for f in record.findings if f.decision_id == d.id and f.verdict == "n/a")
         if dfs:
             lines.append("| Rule | Verdict | Severity | Disposition | Note |")
             lines.append("|---|---|---|---|---|")
@@ -155,6 +160,9 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
                 verdict = f.verdict if f.verified or f.verdict == "unclear" else f"{f.verdict} (unverified)"
                 lines.append(f"| {f.rule_id} {title} | {verdict} | {f.severity} | {f.disposition} | {note} |")
             lines.append("")
+        if na_ids:
+            lines.append(f"Not applicable to this decision ({len(na_ids)}): {', '.join(na_ids)}.")
+            lines.append("")
         advs = [a for a in record.advisories if a.decision_id == d.id]
         if advs:
             lines.append("**Advisory questions.**")
@@ -163,7 +171,7 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
                 lines.append(f"- {a.question}")
                 lines.append(f"  Answer: {a.answer or '(not answered)'}")
             lines.append("")
-    docfs = [f for f in record.findings if f.decision_id is None]
+    docfs = [f for f in record.findings if f.decision_id is None and f.verdict != "n/a"]
     if docfs:
         lines.append("## Document-level findings")
         lines.append("")

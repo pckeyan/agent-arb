@@ -12,6 +12,16 @@ from .manifest import Manifest
 from .models import AdvisoryAnswer, Decision, Finding, ManifestEntry, Rule, RuleType, Section
 from .verify import verify_findings
 
+VERDICTS = {"pass", "fail", "unclear", "n/a"}
+_NA_SPELLINGS = {"n/a", "na", "not-applicable", "not_applicable", "not applicable", "notapplicable"}
+
+
+def normalise_verdict(raw: object) -> str:
+    v = str(raw if raw is not None else "unclear").strip().lower()
+    if v in _NA_SPELLINGS:
+        return "n/a"
+    return v if v in VERDICTS else "unclear"
+
 
 def _prompt(name: str) -> str:
     return (resources.files("agent_arb") / "prompts" / name).read_text(encoding="utf-8")
@@ -79,9 +89,7 @@ def _judge_batch(
     for raw in reply.get("findings", []) or []:
         if not isinstance(raw, dict) or raw.get("rule_id") not in by_id:
             continue
-        verdict = str(raw.get("verdict", "unclear")).lower()
-        if verdict not in {"pass", "fail", "unclear"}:
-            verdict = "unclear"
+        verdict = normalise_verdict(raw.get("verdict"))
         rule = by_id[raw["rule_id"]]
         findings.append(
             Finding(
@@ -131,9 +139,7 @@ def judge_document(
     for raw in reply.get("findings", []) or []:
         if not isinstance(raw, dict) or raw.get("rule_id") not in by_id:
             continue
-        verdict = str(raw.get("verdict", "unclear")).lower()
-        if verdict not in {"pass", "fail", "unclear"}:
-            verdict = "unclear"
+        verdict = normalise_verdict(raw.get("verdict"))
         rule = by_id[raw["rule_id"]]
         findings.append(
             Finding(

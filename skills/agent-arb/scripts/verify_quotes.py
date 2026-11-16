@@ -4,8 +4,9 @@
 A quote is accepted verbatim, or repaired to the single sentence it clearly paraphrases
 when at least 75 percent of its words occur in that sentence, it has at least five words,
 and every number in it appears in that sentence. Repaired findings carry
-the real sentence and a note. A quote matching nothing is dropped with its finding. A failure with no quote is kept but
-marked unverified; a pass with no quote is dropped.
+the real sentence and a note. A pass whose quote matches nothing is dropped with its finding. A failure whose quote
+matches nothing loses the quote and is kept, marked unverified. A failure with no quote is kept but marked unverified;
+a pass with no quote is dropped. A finding judged "n/a" needs no quote and is kept with any quote removed.
 
 Usage: verify_quotes.py --findings findings.json --section-text section.txt
 Prints {"kept": [...], "dropped": [...]} and rewrites findings.json with the kept findings.
@@ -56,6 +57,11 @@ def main():
     text = norm(raw)
     kept, dropped = [], []
     for fnd in findings:
+        if fnd.get("verdict") == "n/a":
+            fnd["quote"] = ""
+            fnd["verified"] = False
+            kept.append(fnd)
+            continue
         q = norm(fnd.get("quote", ""))
         if not q:
             if fnd.get("verdict") == "pass":
@@ -79,9 +85,16 @@ def main():
             fnd["explanation"] = (fnd.get("explanation", "") + " [quote matched to the nearest sentence]").strip()
             fnd["verified"] = True
             kept.append(fnd)
-        else:
+        elif fnd.get("verdict") == "pass":
             fnd["verified"] = False
             dropped.append(fnd)
+        else:
+            fnd["verified"] = False
+            fnd["quote"] = ""
+            fnd["explanation"] = (
+                fnd.get("explanation", "") + " [the quote offered was not in the text; unverified]"
+            ).strip()
+            kept.append(fnd)
     with open(a.findings, "w", encoding="utf-8") as f:
         json.dump({"findings": kept}, f, indent=1)
     print(json.dumps({"kept": kept, "dropped": dropped}, indent=1))

@@ -144,7 +144,8 @@ class Decision(BaseModel):
 class Finding(BaseModel):
     rule_id: str
     decision_id: str | None
-    verdict: Literal["pass", "fail", "unclear"]
+    verdict: Literal["pass", "fail", "unclear", "n/a"]
+    """n/a: the rule concerns a mechanism this decision does not involve, as judged from the text."""
     severity: Severity
     quote: str = ""
     explanation: str = ""

@@ -2,10 +2,13 @@
 
 A quote is accepted verbatim, or repaired to the single sentence of the text it
 clearly paraphrases when most of the quote's words occur in that sentence. A
-repaired finding carries the real sentence, never the model's wording. A quote
-that matches nothing is dropped along with its finding. A failure that offers no
-quote at all is kept but marked unverified, because an absence cannot be quoted;
-a pass with no quote is dropped, because a pass must point at evidence.
+repaired finding carries the real sentence, never the model's wording. A pass
+whose quote matches nothing is dropped along with its finding, because a pass
+must point at evidence. A failure whose quote matches nothing loses the quote
+and is kept, marked unverified, so the author checks the claim rather than never
+seeing it. A failure that offers no quote at all is likewise kept but unverified,
+because an absence cannot be quoted; a pass with no quote is dropped. A finding
+judged not applicable (n/a) needs no quote and is kept with any quote removed.
 """
 
 from __future__ import annotations
@@ -64,6 +67,11 @@ def verify_findings(findings: list[Finding], text: str) -> tuple[list[Finding], 
     kept: list[Finding] = []
     dropped: list[Finding] = []
     for f in findings:
+        if f.verdict == "n/a":
+            f.quote = ""
+            f.verified = False
+            kept.append(f)
+            continue
         if not f.quote.strip():
             if f.verdict == "pass":
                 f.verified = False
@@ -80,7 +88,13 @@ def verify_findings(findings: list[Finding], text: str) -> tuple[list[Finding], 
         quote, repaired = resolve_quote(f.quote, text)
         if quote is None:
             f.verified = False
-            dropped.append(f)
+            if f.verdict == "pass":
+                dropped.append(f)
+                continue
+            # The claim may still be right; only its citation is wrong. Show it, without the bad quote.
+            f.quote = ""
+            f.explanation = (f.explanation + " [the quote offered was not in the text; unverified]").strip()
+            kept.append(f)
             continue
         if repaired:
             f.quote = quote
