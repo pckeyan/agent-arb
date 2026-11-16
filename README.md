@@ -55,6 +55,18 @@ agent-arb rules list --seeds acme.yaml            # shows which base rules your 
 
 The record lands in `.agent-arb/` next to the document as Markdown and JSON, with a manifest listing exactly what every prompt contained.
 
+### Sign-off
+
+The first page of every record is an alignment page: the reviewed document and its content hash, the outcome, the conditions, the decisions as a table, the action items with owners, a disposition summary, and an approvals table. Acceptance is digital. An approver accepts by entering a date against their name; there is no signature column.
+
+```bash
+agent-arb review design.md --approver "Priya Natarajan, Head of Platform" --approver "Daniel Okafor, Security Architect"
+agent-arb sign .agent-arb/design.record.json --name "Daniel Okafor" --role "Security Architect" \
+    --decision approved-with-conditions --condition "State the retry budget before launch" --owner A3="orders team"
+```
+
+`sign` updates the JSON record, re-renders the Markdown, and derives the outcome: pending while anyone has not decided, not approved if anyone rejected, otherwise approved or approved with conditions. In interactive mode the review ends by asking for owners, conditions, a one-line statement and the approvers. Action items come from failures that were verified against the text or that the author accepted, disputed or revised; an unverified failure nobody looked at stays in the appendix, and a waived one is recorded with its rationale instead. The acceptance applies to one content hash, so a changed document needs a new review.
+
 Try it on the example:
 
 ```bash
@@ -140,7 +152,8 @@ The judge may also answer that a rule is not applicable to a decision, which is 
 | Judge | Local model, temperature 0 | Host model, one packet per prompt |
 | Verify quotes | Verbatim check, ungrounded passes dropped | `scripts/verify_quotes.py` |
 | Walk-through | Terminal prompt per finding | Conversation per finding |
-| Record | Markdown and JSON to the spec | `Write` Markdown and JSON to the same spec |
+| Record | Markdown and JSON to the spec, alignment page first | `Write` Markdown and JSON to the same spec |
+| Sign | `agent-arb sign` enters the date against a name | Host edits the approvals table, date only |
 | Compile seeds | Full pipeline, PDF included | Markdown and YAML; PDF seeds are compiled with the CLI once and the pack shared |
 
 In skill mode the host's context accumulates over a session, so by the end most sections have been sent one at a time. The skill never reads a whole document or pack at once, never reads seed PDFs, and never touches material the current decision does not need. For documents that must not leave the machine, use the CLI with a local model.

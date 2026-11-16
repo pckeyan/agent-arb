@@ -18,6 +18,8 @@ All notable changes to this project are documented here. The format follows Keep
 - A fourth verdict, `n/a`: the judge decides whether a rule's concern is settled by this decision at all, so a database choice is not failed for saying nothing about retries. Not-applicable findings are counted in the record, not listed, and never lower a maturity level.
 - Eval runner: `--out` keeps records, `--only` runs one document, and expected decisions accept any-of keyword slots.
 
+- Alignment page at the top of every record: document content hash and version, outcome, statement, conditions, agreed decisions, action items with owners, disposition summary, and an approvals table with name, role, decision and date. Acceptance is digital, by date; there is no signature column. `agent-arb review --approver "Name, Role"` adds pending approvers, the interactive flow ends by asking for owners, conditions and approvers, and `agent-arb sign` records a decision, re-renders the record and derives the outcome.
+
 ### Changed
 - Evidence policy: a failure whose quote is not in the text is now kept as unverified with the quote removed, instead of being dropped. A pass with an ungrounded quote is still dropped.
 

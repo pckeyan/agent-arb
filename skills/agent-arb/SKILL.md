@@ -48,6 +48,12 @@ Run `python3 scripts/select_rules.py --document --tier <tier> [--company <folder
 
 ## 6. Write the record
 
-Write `.agent-arb/<doc>.record.md` and `.agent-arb/<doc>.record.json` following `references/record-format.md`. Include: levels observed versus target for observability, alerting and resilience, service levels stated in the document, every decision with its findings and dispositions, document-level findings, advisory answers, the compliance traceability table, and the pack versions used. State that this is a design-time review and not an attestation.
+Before writing, build the alignment page. Compute a short content hash of the document (`shasum -a 256`, first 16 hex characters) so the acceptance is tied to one revision. Derive the action items: every failed finding that was verified or that the author accepted, disputed or revised, and never a waived one. Ask the author for an owner per action, the conditions of acceptance, a one-line statement for approvers, the outcome they are requesting, and the approvers as name and role. Each approver starts as a pending row with an empty date.
+
+Write `.agent-arb/<doc>.record.md` and `.agent-arb/<doc>.record.json` following `references/record-format.md`, alignment page first. Include: levels observed versus target for observability, alerting and resilience, service levels stated in the document, every decision with its findings and dispositions, document-level findings, advisory answers, the compliance traceability table, and the pack versions used. State that this is a design-time review and not an attestation.
 
 Tell the author where the record is and the three findings that matter most.
+
+## 7. Sign-off
+
+When a stakeholder accepts, rejects or accepts with conditions, update their row in the approvals table: set the decision, the date (this is the acceptance; there is no signature), and an optional note, in both the Markdown and the JSON. Then set the outcome: pending while any approver has no decision, not approved if anyone rejected, approved with conditions if anyone chose that or conditions exist, otherwise approved. Never change an approver's row on their behalf; only the person named, or someone they delegate to in the conversation, enters their date.

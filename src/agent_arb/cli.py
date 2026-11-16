@@ -9,13 +9,26 @@ from typing import Annotated
 import typer
 
 from . import __version__
+from .alignment import add_approver, assign_owner, derive_actions, document_hash, sign
 from .compile import compile_seed, dump_pack
 from .config import CONFIG_PATH, load_config, write_default_config
 from .decisions import propose_decisions
 from .ingest import outline, read_document, split_sections
 from .llm import Model, ModelError, OpenAICompatibleModel
 from .manifest import Manifest
-from .models import AdvisoryAnswer, Decision, Finding, Layer, Pack, PackRef, Record, Rule, RuleType, Status
+from .models import (
+    AdvisoryAnswer,
+    Decision,
+    Finding,
+    Layer,
+    Outcome,
+    Pack,
+    PackRef,
+    Record,
+    Rule,
+    RuleType,
+    Status,
+)
 from .record import compliance_rows, level_summary, service_levels, write_record
 from .review import advisories_for, judge_decision, judge_document
 from .rules import RuleSet, load_builtin_packs, load_pack, load_packs_from_dir, load_tiers
@@ -105,6 +118,13 @@ def review(
     ] = None,
     no_builtin: Annotated[bool, typer.Option("--no-builtin", help="Use only the packs you pass. For tests.")] = False,
     model_override: Annotated[str | None, typer.Option("--model", help="Model name, overriding config.")] = None,
+    approvers: Annotated[
+        list[str] | None,
+        typer.Option("--approver", help='Stakeholder expected to accept, as "Name, Role". Repeatable.'),
+    ] = None,
+    document_version: Annotated[
+        str, typer.Option("--document-version", help="Version label of the document, for the alignment page.")
+    ] = "",
 ) -> None:
     """Review a design document decision by decision and write a record."""
     if seeds is None:
@@ -116,7 +136,64 @@ def review(
     if model_override:
         model.name = model_override  # type: ignore[attr-defined]
     packs = _load_all_packs(seeds, project, no_builtin)
-    run_review(document, packs, model, out, tier, interactive, challenge, cfg.review.rules_per_prompt)
+    run_review(
+        document,
+        packs,
+        model,
+        out,
+        tier,
+        interactive,
+        challenge,
+        cfg.review.rules_per_prompt,
+        approvers=[_split_approver(a) for a in approvers or []],
+        document_version=document_version,
+    )
+
+
+def _split_approver(value: str) -> tuple[str, str]:
+    name, _, role = value.partition(",")
+    if not name.strip() or not role.strip():
+        raise typer.BadParameter(f'approver must be "Name, Role", got {value!r}')
+    return name.strip(), role.strip()
+
+
+@app.command("sign")
+def sign_cmd(
+    record_path: Annotated[Path, typer.Argument(help="The .record.json written by review.")],
+    name: Annotated[str, typer.Option("--name", help="Approver's name.")],
+    role: Annotated[str, typer.Option("--role", help="Approver's role, for example 'Head of Platform'.")],
+    decision: Annotated[
+        str, typer.Option("--decision", help="approved, approved-with-conditions or rejected.")
+    ] = "approved",
+    note: Annotated[str, typer.Option("--note", help="One line, recorded next to the decision.")] = "",
+    date: Annotated[str, typer.Option("--date", help="Acceptance date, YYYY-MM-DD. Default today.")] = "",
+    conditions: Annotated[
+        list[str] | None, typer.Option("--condition", help="Add a condition of acceptance. Repeatable.")
+    ] = None,
+    owners: Annotated[
+        list[str] | None, typer.Option("--owner", help='Assign an action, as "A3=Name". Repeatable.')
+    ] = None,
+) -> None:
+    """Record a stakeholder's acceptance on an existing record and re-render it. The date is the acceptance."""
+    if decision not in {"approved", "approved-with-conditions", "rejected"}:
+        raise typer.BadParameter("decision must be approved, approved-with-conditions or rejected")
+    record = Record.model_validate_json(record_path.read_text(encoding="utf-8"))
+    for c in conditions or []:
+        if c not in record.conditions:
+            record.conditions.append(c)
+    for o in owners or []:
+        action_id, _, owner = o.partition("=")
+        try:
+            assign_owner(record, action_id.strip(), owner.strip())
+        except KeyError:
+            raise typer.BadParameter(f"no action {action_id.strip()} in the record") from None
+    approval = sign(record, name, role, decision, note, date)  # type: ignore[arg-type]
+    stem = record_path.name.removesuffix(".record.json")
+    rules = RuleSet(load_builtin_packs()).rules
+    md, _ = write_record(record, rules, record_path.parent, stem)
+    typer.secho(f"{approval.name} ({approval.role}): {approval.decision} on {approval.date}", fg="green")
+    typer.echo(f"outcome: {record.outcome}")
+    typer.echo(f"record: {md}")
 
 
 def run_review(
@@ -128,6 +205,8 @@ def run_review(
     interactive: bool,
     challenge: bool,
     rules_per_prompt: int = 6,
+    approvers: list[tuple[str, str]] | None = None,
+    document_version: str = "",
 ) -> Record:
     """The whole flow. Shared by the CLI and the evals."""
     ruleset = RuleSet(packs)
@@ -218,10 +297,48 @@ def run_review(
         levels=[lv for lv in levels if lv.observed or lv.missing_rule_ids],
         compliance=compliance_rows(ruleset.rules, findings),
         service_levels=service_levels(text),
+        document_hash=document_hash(document),
+        document_version=document_version,
+        actions=derive_actions(findings, ruleset.rules),
     )
+    for name, role in approvers or []:
+        add_approver(record, name, role)
+    if interactive:
+        _ask_alignment(record)
     md, js = write_record(record, ruleset.rules, out, document.stem)
     typer.secho(f"record: {md}\n        {js}\nmanifest: {manifest.path}", fg="green")
     return record
+
+
+def _ask_alignment(record: Record) -> None:
+    """The last interactive step: the author states the outcome they are asking for and its conditions."""
+    typer.echo(f"\nAlignment. {len(record.actions)} action item(s) will go on the first page.")
+    for a in record.actions:
+        owner = typer.prompt(f"  {a.id} [{a.severity}] {a.rule_id} {a.summary}\n  owner", default="").strip()
+        a.owner = owner
+    while True:
+        c = typer.prompt("  condition of acceptance (blank to finish)", default="").strip()
+        if not c:
+            break
+        record.conditions.append(c)
+    record.statement = typer.prompt("  one-line statement for approvers", default="").strip()
+    outcomes: dict[str, Outcome] = {
+        "p": "pending",
+        "a": "approved",
+        "c": "approved-with-conditions",
+        "n": "not-approved",
+    }
+    menu = "  outcome requested: [p]ending, [a]pproved, approved with [c]onditions, [n]ot approved"
+    choice = typer.prompt(menu, default="p")
+    record.outcome = outcomes.get(choice.strip().lower()[:1], "pending")
+    while True:
+        who = typer.prompt('  approver as "Name, Role" (blank to finish)', default="").strip()
+        if not who:
+            break
+        try:
+            add_approver(record, *_split_approver(who))
+        except typer.BadParameter as e:
+            typer.secho(f"  {e}", fg="yellow")
 
 
 def _confirm_decisions(decisions: list[Decision]) -> list[Decision]:

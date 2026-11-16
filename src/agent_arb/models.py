@@ -195,6 +195,32 @@ class ComplianceRow(BaseModel):
     disposition: str
 
 
+Outcome = Literal["pending", "approved", "approved-with-conditions", "not-approved"]
+ApprovalDecision = Literal["pending", "approved", "approved-with-conditions", "rejected"]
+
+
+class Approval(BaseModel):
+    """One stakeholder's acceptance. The date is the acceptance; a pending row has none."""
+
+    name: str
+    role: str
+    decision: ApprovalDecision = "pending"
+    date: str = ""
+    note: str = ""
+
+
+class Action(BaseModel):
+    """Something the document owner must do before or after acceptance, derived from a failed finding."""
+
+    id: str = ""
+    rule_id: str
+    decision_id: str | None
+    severity: Severity
+    summary: str
+    owner: str = ""
+    status: Literal["open", "disputed", "done"] = "open"
+
+
 class Record(BaseModel):
     engine: str
     engine_version: str
@@ -209,3 +235,11 @@ class Record(BaseModel):
     levels: list[LevelSummary] = Field(default_factory=list)
     compliance: list[ComplianceRow] = Field(default_factory=list)
     service_levels: list[str] = Field(default_factory=list)
+    # Alignment: the page stakeholders accept.
+    document_hash: str = ""
+    document_version: str = ""
+    outcome: Outcome = "pending"
+    statement: str = ""
+    conditions: list[str] = Field(default_factory=list)
+    actions: list[Action] = Field(default_factory=list)
+    approvals: list[Approval] = Field(default_factory=list)

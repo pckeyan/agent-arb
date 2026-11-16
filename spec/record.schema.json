@@ -1,5 +1,60 @@
 {
   "$defs": {
+    "Action": {
+      "description": "Something the document owner must do before or after acceptance, derived from a failed finding.",
+      "properties": {
+        "id": {
+          "default": "",
+          "title": "Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Decision Id"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "owner": {
+          "default": "",
+          "title": "Owner",
+          "type": "string"
+        },
+        "status": {
+          "default": "open",
+          "enum": [
+            "open",
+            "disputed",
+            "done"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "decision_id",
+        "severity",
+        "summary"
+      ],
+      "title": "Action",
+      "type": "object"
+    },
     "AdvisoryAnswer": {
       "properties": {
         "rule_id": {
@@ -33,6 +88,46 @@
         "question"
       ],
       "title": "AdvisoryAnswer",
+      "type": "object"
+    },
+    "Approval": {
+      "description": "One stakeholder's acceptance. The date is the acceptance; a pending row has none.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "decision": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "approved",
+            "approved-with-conditions",
+            "rejected"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "date": {
+          "default": "",
+          "title": "Date",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ],
+      "title": "Approval",
       "type": "object"
     },
     "ComplianceRow": {
@@ -408,6 +503,53 @@
         "type": "string"
       },
       "title": "Service Levels",
+      "type": "array"
+    },
+    "document_hash": {
+      "default": "",
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "document_version": {
+      "default": "",
+      "title": "Document Version",
+      "type": "string"
+    },
+    "outcome": {
+      "default": "pending",
+      "enum": [
+        "pending",
+        "approved",
+        "approved-with-conditions",
+        "not-approved"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "statement": {
+      "default": "",
+      "title": "Statement",
+      "type": "string"
+    },
+    "conditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Conditions",
+      "type": "array"
+    },
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/Action"
+      },
+      "title": "Actions",
+      "type": "array"
+    },
+    "approvals": {
+      "items": {
+        "$ref": "#/$defs/Approval"
+      },
+      "title": "Approvals",
       "type": "array"
     }
   },

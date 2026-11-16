@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 
+from .alignment import render_alignment
 from .models import ComplianceRow, Finding, LevelSummary, Record, Rule
 
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3, "info": 4}
@@ -89,6 +90,11 @@ def render_markdown(record: Record, rules: dict[str, Rule]) -> str:
         "This is a design-time review of what the document states. It is not an assessment "
         "or attestation against any compliance framework."
     )
+    lines.append("")
+    lines.extend(render_alignment(record))
+    lines.append("---")
+    lines.append("")
+    lines.append("The sections below are the full review detail that supports the alignment above.")
     lines.append("")
     if record.levels:
         lines.append("## Levels")
