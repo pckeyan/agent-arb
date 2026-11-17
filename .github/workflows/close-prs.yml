@@ -3,6 +3,9 @@ on:
   pull_request_target: {types: [opened]}
 jobs:
   close:
+    # Only pull requests from forks are closed. Branches of this repository are the
+    # maintainer's own workflow: every change goes through a PR that a person merges.
+    if: github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     permissions: {pull-requests: write}
     steps:
